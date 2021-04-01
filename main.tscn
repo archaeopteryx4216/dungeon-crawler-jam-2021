@@ -1,0 +1,166 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://main.gd" type="Script" id=1]
+[ext_resource path="res://map_mesh/cube.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://player_arrow.png" type="Texture" id=3]
+[ext_resource path="res://crosshairs.png" type="Texture" id=4]
+[ext_resource path="res://crosshairs.gd" type="Script" id=5]
+
+[sub_resource type="BoxShape" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 0.838
+anchor_bottom = 0.953
+margin_left = -1.05945
+margin_right = -1.17145
+margin_bottom = 0.199951
+rect_min_size = Vector2( 858, 572 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="main_view" type="ViewportContainer" parent="."]
+margin_left = 30.0
+margin_top = 30.0
+margin_right = 542.0
+margin_bottom = 542.0
+stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="firstperson_viewport" type="Viewport" parent="main_view"]
+size = Vector2( 256, 256 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="firstperson_pos" type="Spatial" parent="main_view/firstperson_viewport"]
+
+[node name="firstperson_camera" type="Camera" parent="main_view/firstperson_viewport/firstperson_pos"]
+
+[node name="front_ray" type="RayCast" parent="main_view/firstperson_viewport/firstperson_pos"]
+enabled = true
+cast_to = Vector3( 0, 0, -2 )
+collide_with_areas = true
+
+[node name="left_ray" type="RayCast" parent="main_view/firstperson_viewport/firstperson_pos"]
+enabled = true
+cast_to = Vector3( -2, 0, 0 )
+collide_with_areas = true
+
+[node name="right_ray" type="RayCast" parent="main_view/firstperson_viewport/firstperson_pos"]
+enabled = true
+cast_to = Vector3( 2, 0, 0 )
+collide_with_areas = true
+
+[node name="back_ray" type="RayCast" parent="main_view/firstperson_viewport/firstperson_pos"]
+enabled = true
+cast_to = Vector3( 0, 0, 2 )
+collide_with_areas = true
+
+[node name="crosshairs" type="Sprite" parent="main_view"]
+texture = ExtResource( 4 )
+script = ExtResource( 5 )
+
+[node name="side_view" type="ViewportContainer" parent="."]
+margin_left = 572.0
+margin_top = 30.0
+margin_right = 828.0
+margin_bottom = 286.0
+stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="overhead_viewport" type="Viewport" parent="side_view"]
+size = Vector2( 256, 256 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="overhead_pos" type="Spatial" parent="side_view/overhead_viewport"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8, 0 )
+
+[node name="overhead_camera" type="Camera" parent="side_view/overhead_viewport/overhead_pos"]
+
+[node name="player_sprite" type="Sprite" parent="side_view"]
+texture = ExtResource( 3 )
+
+[node name="Spatial" type="Spatial" parent="."]
+
+[node name="CSGMesh" type="CSGMesh" parent="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
+mesh = ExtResource( 2 )
+
+[node name="Area" type="Area" parent="Spatial/CSGMesh"]
+gravity_vec = Vector3( 0, 0, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/CSGMesh/Area"]
+shape = SubResource( 1 )
+
+[node name="button_container" type="Control" parent="."]
+margin_left = 572.0
+margin_top = 316.0
+margin_right = 612.0
+margin_bottom = 356.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="turn_left" type="Button" parent="button_container"]
+margin_right = 85.0
+margin_bottom = 20.0
+action_mode = 0
+text = "Turn Left"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_up" type="Button" parent="button_container"]
+margin_left = 90.0
+margin_right = 175.0
+margin_bottom = 20.0
+action_mode = 0
+text = "Move Up"
+
+[node name="turn_right" type="Button" parent="button_container"]
+margin_left = 180.0
+margin_right = 265.0
+margin_bottom = 20.0
+action_mode = 0
+text = "Turn Right"
+
+[node name="move_left" type="Button" parent="button_container"]
+margin_top = 30.0
+margin_right = 85.0
+margin_bottom = 50.0
+action_mode = 0
+text = "Move Left"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_back" type="Button" parent="button_container"]
+margin_left = 90.0
+margin_top = 30.0
+margin_right = 175.0
+margin_bottom = 50.0
+action_mode = 0
+text = "Move Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move_right" type="Button" parent="button_container"]
+margin_left = 180.0
+margin_top = 30.0
+margin_right = 265.0
+margin_bottom = 50.0
+action_mode = 0
+text = "Move Right"
+[connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
+[connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
+[connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]
+[connection signal="pressed" from="button_container/move_left" to="." method="_on_move_left_pressed"]
+[connection signal="pressed" from="button_container/move_back" to="." method="_on_move_back_pressed"]
+[connection signal="pressed" from="button_container/move_right" to="." method="_on_move_right_pressed"]

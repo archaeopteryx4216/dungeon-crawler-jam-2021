@@ -1,7 +1,6 @@
 Alex's Tasks:
 - Reorganize project into separate scenes
-- Use new scenery meshes to create scenery blocks
-- Figure out grid mapping and use that to build a map
+- Test out replacing the overhead camera with sprites
 - TODO: Finish TODO list
 
 Claire's Tasks:

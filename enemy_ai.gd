@@ -38,6 +38,8 @@ func set_home_position(pos):
 func _on_action_timer_timeout():
 	var next_position = get_translation()
 	var turn_candidates = []
+	if not target_position:
+		return
 	# Take a step forward
 	if not $"./front_ray".is_colliding():
 		# Not colliding, so can move

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/enemy_arrow.png-182d2a35110021e4007cab7e88806a29.stex"
+path="res://.import/test_ghost_side_1.png-ba79aa8164c0c4b54879e127e9e8f625.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy_arrow.png"
-dest_files=[ "res://.import/enemy_arrow.png-182d2a35110021e4007cab7e88806a29.stex" ]
+source_file="res://3D_Sprites/test_ghost_side_1.png"
+dest_files=[ "res://.import/test_ghost_side_1.png-ba79aa8164c0c4b54879e127e9e8f625.stex" ]
 
 [params]
 

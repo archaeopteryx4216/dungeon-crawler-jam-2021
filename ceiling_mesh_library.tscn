@@ -6,6 +6,8 @@
 [node name="Spatial" type="Spatial"]
 
 [node name="ceiling light" type="MeshInstance" parent="."]
+visible = false
+layers = 2
 mesh = ExtResource( 1 )
 material/0 = null
 material/1 = null
@@ -13,5 +15,6 @@ material/2 = null
 material/3 = null
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
+layers = 2
 mesh = ExtResource( 2 )
 material/0 = null

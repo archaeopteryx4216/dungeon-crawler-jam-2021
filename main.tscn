@@ -84,6 +84,9 @@ render_target_update_mode = 3
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8, 0 )
 
 [node name="overhead_camera" type="Camera" parent="side_view/overhead_viewport/overhead_pos"]
+cull_mask = 1048573
+near = 0.01
+far = 10.0
 
 [node name="player_sprite" type="Sprite" parent="side_view"]
 texture = ExtResource( 3 )
@@ -91,8 +94,8 @@ texture = ExtResource( 3 )
 [node name="button_container" type="Control" parent="."]
 margin_left = 572.0
 margin_top = 316.0
-margin_right = 612.0
-margin_bottom = 356.0
+margin_right = 839.0
+margin_bottom = 368.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -172,20 +175,22 @@ __meta__ = {
 "_editor_clip_": 0
 }
 
-[node name="ceiling" type="GridMap" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1 )
-mesh_library = ExtResource( 7 )
+[node name="floor" type="GridMap" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 1 )
 data = {
-"cells": PoolIntArray( 0, 0, -1610612734, 2, 0, 536870914, 3, 0, 536870914, 4, 0, 536870913, 5, 0, -1073741822, 6, 0, 536870913, 7, 0, 2, 8, 0, 536870914, 65531, 0, -1610612734, 65535, 0, -1610612734, 0, 1, 536870914, 1, 1, 2, 2, 1, 536870914, 3, 1, -1610612734, 4, 1, 536870914, 5, 1, 2, 6, 1, 536870914, 7, 1, 2, 8, 1, 536870914, 65531, 1, 1, 65532, 1, 2, 65533, 1, 2, 65534, 1, 2, 65535, 1, 536870913, 2, 2, 2, 3, 2, -1610612734, 4, 2, 1, 5, 2, 536870914, 6, 2, 1, 7, 2, -1610612734, 8, 2, 536870914, 3, 3, -1073741822, 4, 3, 2, 5, 3, -1610612734, 6, 3, -1610612734, 7, 3, 536870914, 4, 4, 2, 5, 4, 536870914, 6, 4, 536870914, 65531, 65529, -1610612734, 65532, 65529, -1610612734, 65533, 65529, 536870913, 65534, 65529, 536870914, 65535, 65529, -1610612734, 65531, 65530, -1610612734, 65535, 65530, -1073741822, 65531, 65531, -1610612734, 65535, 65531, 536870914, 65531, 65532, -1610612735, 65532, 65532, -1610612734, 65534, 65532, 536870914, 65535, 65532, 536870913, 65532, 65533, -1610612734, 65534, 65533, -1610612734, 4, 65534, 536870914, 5, 65534, -1610612734, 6, 65534, 536870914, 65531, 65534, -1610612735, 65532, 65534, 2, 65534, 65534, -1610612734, 65535, 65534, 536870913, 3, 65535, -1610612734, 4, 65535, -1610612734, 5, 65535, -1610612734, 6, 65535, 536870914, 7, 65535, 536870914, 65531, 65535, 2, 65535, 65535, -1610612734 )
+"cells": PoolIntArray(  )
 }
 __meta__ = {
 "_editor_clip_": 0
 }
 
-[node name="floor" type="GridMap" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 1 )
+[node name="ceiling" type="GridMap" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1 )
+mesh_library = ExtResource( 7 )
+collision_layer = 2
+collision_mask = 2
 data = {
-"cells": PoolIntArray(  )
+"cells": PoolIntArray( 65535, 65532, 536870912, 65535, 65534, 0 )
 }
 __meta__ = {
 "_editor_clip_": 0

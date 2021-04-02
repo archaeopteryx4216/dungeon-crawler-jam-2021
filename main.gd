@@ -11,6 +11,9 @@ var colision_count = 0
 
 export var player_facing = NORTH
 
+func _ready():
+	$"side_view/player_sprite".position = Vector2(128,128)
+
 func _input(event):
 	#if event && !event.echo && event.pressed:
 	if event.is_action_pressed("move_up"):

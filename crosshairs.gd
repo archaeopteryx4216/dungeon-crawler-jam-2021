@@ -25,5 +25,7 @@ func _input(event):
 		# Hide the mouse if we are inside bounds
 		if inside_bounds:
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+			visible = true
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			visible = false

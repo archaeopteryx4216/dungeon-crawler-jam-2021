@@ -1,19 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
-[ext_resource path="res://map_mesh/cube.obj" type="ArrayMesh" id=2]
 [ext_resource path="res://player_arrow.png" type="Texture" id=3]
 [ext_resource path="res://crosshairs.png" type="Texture" id=4]
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
-
-[sub_resource type="BoxShape" id=1]
+[ext_resource path="res://generic_cube.tscn" type="PackedScene" id=6]
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
 anchor_bottom = 0.953
 margin_left = -1.05945
 margin_right = -1.17145
-margin_bottom = 0.199951
+margin_bottom = 0.200012
 rect_min_size = Vector2( 858, 572 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -86,18 +84,6 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8, 0
 [node name="player_sprite" type="Sprite" parent="side_view"]
 texture = ExtResource( 3 )
 
-[node name="Spatial" type="Spatial" parent="."]
-
-[node name="CSGMesh" type="CSGMesh" parent="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
-mesh = ExtResource( 2 )
-
-[node name="Area" type="Area" parent="Spatial/CSGMesh"]
-gravity_vec = Vector3( 0, 0, 0 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Spatial/CSGMesh/Area"]
-shape = SubResource( 1 )
-
 [node name="button_container" type="Control" parent="."]
 margin_left = 572.0
 margin_top = 316.0
@@ -158,6 +144,9 @@ margin_right = 265.0
 margin_bottom = 50.0
 action_mode = 0
 text = "Move Right"
+
+[node name="instanced_cube" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

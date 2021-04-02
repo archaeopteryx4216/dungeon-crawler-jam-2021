@@ -11,8 +11,7 @@ var colision_count = 0
 
 export var player_facing = NORTH
 
-func _ready():
-	$"side_view/player_sprite".position = Vector2(128,128)
+
 
 func _input(event):
 	#if event && !event.echo && event.pressed:
@@ -34,8 +33,8 @@ func _input(event):
 func update_cameras(pos_change, turn_rads):
 	# Move first person camera
 	$"main_view/firstperson_viewport/firstperson_pos".set_translation($"main_view/firstperson_viewport/firstperson_pos".get_translation() + pos_change)
-	# Move overhead camera
-	$"side_view/overhead_viewport/overhead_pos".set_translation($"side_view/overhead_viewport/overhead_pos".get_translation() + pos_change)
+	# TODO Move Overhead Camera
+	
 	# Set first person camera rotation
 	$"main_view/firstperson_viewport/firstperson_pos".set_rotation($"main_view/firstperson_viewport/firstperson_pos".get_rotation() + turn_rads)
 	# Rotate player sprite in side view

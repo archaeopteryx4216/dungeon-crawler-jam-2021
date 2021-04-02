@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://crosshairs.png" type="Texture" id=4]
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
 [ext_resource path="res://details_mesh_library.tres" type="MeshLibrary" id=6]
+[ext_resource path="res://side_view.gd" type="Script" id=7]
+[ext_resource path="res://minimap_sprites/floor.png" type="Texture" id=8]
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
 
 [sub_resource type="Environment" id=1]
@@ -66,32 +68,6 @@ collide_with_areas = true
 [node name="crosshairs" type="Sprite" parent="main_view"]
 texture = ExtResource( 4 )
 script = ExtResource( 5 )
-
-[node name="side_view" type="ViewportContainer" parent="."]
-margin_left = 572.0
-margin_top = 30.0
-margin_right = 828.0
-margin_bottom = 286.0
-stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="overhead_viewport" type="Viewport" parent="side_view"]
-size = Vector2( 256, 256 )
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="overhead_pos" type="Spatial" parent="side_view/overhead_viewport"]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8, 0 )
-
-[node name="overhead_camera" type="Camera" parent="side_view/overhead_viewport/overhead_pos"]
-cull_mask = 1048573
-near = 0.01
-far = 10.0
-
-[node name="player_sprite" type="Sprite" parent="side_view"]
-texture = ExtResource( 3 )
 
 [node name="button_container" type="Control" parent="."]
 margin_left = 572.0
@@ -189,6 +165,23 @@ __meta__ = {
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
+
+[node name="side_view" type="Container" parent="."]
+margin_left = 572.0
+margin_top = 30.0
+margin_right = 828.0
+margin_bottom = 286.0
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="side_view" type="Sprite" parent="side_view"]
+texture = ExtResource( 8 )
+offset = Vector2( 128, 128 )
+
+[node name="player_sprite" type="Sprite" parent="side_view"]
+texture = ExtResource( 3 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

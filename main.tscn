@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
 [ext_resource path="res://details_mesh_library.tres" type="MeshLibrary" id=6]
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
+
+[sub_resource type="Environment" id=1]
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
@@ -184,6 +186,9 @@ data = {
 __meta__ = {
 "_editor_clip_": 0
 }
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 1 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

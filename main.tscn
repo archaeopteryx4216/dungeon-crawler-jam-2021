@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
+[ext_resource path="res://mesh_library.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://player_arrow.png" type="Texture" id=3]
 [ext_resource path="res://crosshairs.png" type="Texture" id=4]
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
-[ext_resource path="res://generic_cube.tscn" type="PackedScene" id=6]
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
@@ -145,8 +145,15 @@ margin_bottom = 50.0
 action_mode = 0
 text = "Move Right"
 
-[node name="instanced_cube" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
+[node name="GridMap" type="GridMap" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 1 )
+mesh_library = ExtResource( 2 )
+data = {
+"cells": PoolIntArray( 0, 0, 0, 1, 0, 536870912, 8, 0, 536870912, 65533, 0, -1610612736, 8, 1, 536870912, 65534, 1, -1073741824, 0, 2, 536870912, 1, 2, 536870912, 8, 2, -1073741824, 65534, 2, 0, 65535, 2, 536870912, 2, 3, 536870912, 7, 3, -1073741824, 3, 4, 536870912, 6, 4, 536870912, 4, 5, 536870912, 5, 5, 536870912, 65533, 65531, 536870912, 65535, 65531, 0, 65533, 65532, 536870912, 65535, 65532, 536870912, 0, 65533, 536870912, 4, 65533, 536870912, 5, 65533, -1610612736, 65533, 65533, 536870912, 0, 65534, -1610612736, 3, 65534, -1610612736, 6, 65534, 536870912, 65533, 65534, 536870912, 0, 65535, 536870912, 2, 65535, 536870912, 7, 65535, 536870912, 65533, 65535, -1610612736 )
+}
+__meta__ = {
+"_editor_clip_": 0
+}
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

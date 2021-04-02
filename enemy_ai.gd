@@ -21,11 +21,13 @@ var mode
 func _ready():
 	facing = NORTH
 	mode = CHASE
+	home_position = Vector3(0,0,0)
+	target_position = home_position
 
-func _process(delta):
+func _process(_delta):
 	if mode == CHASE:
 		# Get the position of the player and set it as the target
-		pass
+		target_position = player_position
 
 func set_player_position(pos):
 	player_position = pos
@@ -66,26 +68,25 @@ func _on_action_timer_timeout():
 		for turn in turn_candidates:
 			var new_facing = turn_updated_facing(turn)
 			if new_facing == NORTH:
-				if player_position.distance_to(next_position + Vector3(0, 0, 2)) < shortest_distance:
+				if target_position.distance_to(next_position + Vector3(0, 0, 2)) < shortest_distance:
 					selected_turn = turn
-					shortest_distance = player_position.distance_to(next_position + Vector3(0, 0, 2))
+					shortest_distance = target_position.distance_to(next_position + Vector3(0, 0, 2))
 			elif new_facing == EAST:
-				if player_position.distance_to(next_position + Vector3(-2, 0, 0)) < shortest_distance:
+				if target_position.distance_to(next_position + Vector3(-2, 0, 0)) < shortest_distance:
 					selected_turn = turn
-					shortest_distance = player_position.distance_to(next_position + Vector3(-2, 0, 0))
+					shortest_distance = target_position.distance_to(next_position + Vector3(-2, 0, 0))
 			elif new_facing == WEST:
-				if player_position.distance_to(next_position + Vector3(2, 0, 0)) < shortest_distance:
+				if target_position.distance_to(next_position + Vector3(2, 0, 0)) < shortest_distance:
 					selected_turn = turn
-					shortest_distance = player_position.distance_to(next_position + Vector3(2, 0, 0))
+					shortest_distance = target_position.distance_to(next_position + Vector3(2, 0, 0))
 			elif new_facing == SOUTH:
-				if player_position.distance_to(next_position + Vector3(0, 0, -2)) < shortest_distance:
+				if target_position.distance_to(next_position + Vector3(0, 0, -2)) < shortest_distance:
 					selected_turn = turn
-					shortest_distance = player_position.distance_to(next_position + Vector3(0, 0, -2))
+					shortest_distance = target_position.distance_to(next_position + Vector3(0, 0, -2))
 		turn(selected_turn)
 
 func turn_updated_facing(direction):
 	if direction == "left":
-		set_rotation(get_rotation() + Vector3(0,PI/2,0))
 		if facing == NORTH:
 			return WEST
 		elif facing == WEST:
@@ -95,7 +96,6 @@ func turn_updated_facing(direction):
 		elif facing == EAST:
 			return NORTH
 	elif direction == "right":
-		set_rotation(get_rotation() + Vector3(0,-PI/2,0))
 		if facing == NORTH:
 			return EAST
 		elif facing == EAST:
@@ -105,7 +105,6 @@ func turn_updated_facing(direction):
 		elif facing == WEST:
 			return NORTH
 	elif direction == "reverse":
-		set_rotation(get_rotation() + Vector3(0,PI,0))
 		if facing == NORTH:
 			return SOUTH
 		elif facing == SOUTH:

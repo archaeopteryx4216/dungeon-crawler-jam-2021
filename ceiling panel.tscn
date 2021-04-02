@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://map_mesh/ceiling_panel.obj" type="ArrayMesh" id=1]
+
+[node name="ceiling panel" type="MeshInstance"]
+layers = 2
+mesh = ExtResource( 1 )
+material/0 = null

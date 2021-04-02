@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://map_mesh/ceiling_light.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://flourescent_lightbulb_light.tscn" type="PackedScene" id=2]
+
+[node name="ceiling light" type="MeshInstance"]
+layers = 2
+mesh = ExtResource( 1 )
+material/0 = null
+material/1 = null
+material/2 = null
+material/3 = null
+
+[node name="lights" type="Spatial" parent="."]
+
+[node name="OmniLight" parent="lights" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0.5 )
+
+[node name="OmniLight2" parent="lights" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -0.5 )

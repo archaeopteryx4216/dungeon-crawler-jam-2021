@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -6,7 +6,8 @@
 [ext_resource path="res://crosshairs.png" type="Texture" id=4]
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
 [ext_resource path="res://details_mesh_library.tres" type="MeshLibrary" id=6]
-[ext_resource path="res://ceiling_mesh_library.tres" type="MeshLibrary" id=7]
+[ext_resource path="res://ceiling light.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ceiling panel.tscn" type="PackedScene" id=8]
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
@@ -159,7 +160,7 @@ __meta__ = {
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 1 )
 mesh_library = ExtResource( 2 )
 data = {
-"cells": PoolIntArray( 0, 0, 0, 1, 0, 0, 9, 0, 536870912, 65530, 0, 0, 65532, 0, 0, 65533, 0, 0, 65534, 0, 0, 9, 1, 0, 65530, 1, 0, 0, 2, 0, 1, 2, 0, 9, 2, 536870912, 65530, 2, 0, 65531, 2, 0, 65532, 2, 0, 65533, 2, 0, 65534, 2, 0, 65535, 2, 0, 1, 3, -1609564160, 2, 3, 0, 8, 3, 536870912, 2, 4, 537919488, 3, 4, 1048576, 7, 4, 536870912, 3, 5, 537919488, 4, 5, 0, 5, 5, 0, 6, 5, 537919488, 0, 65528, -1073741824, 65530, 65528, 0, 65531, 65528, 0, 65532, 65528, 0, 65533, 65528, 0, 65534, 65528, 0, 65535, 65528, 0, 0, 65529, 0, 65530, 65529, 0, 0, 65530, 0, 65530, 65530, 0, 65532, 65530, 0, 65533, 65530, 0, 65534, 65530, 0, 0, 65531, 0, 65530, 65531, 0, 65532, 65531, 0, 65533, 65531, 0, 65534, 65531, 0, 0, 65532, 0, 65530, 65532, 0, 65533, 65532, 0, 0, 65533, 0, 3, 65533, 537919488, 4, 65533, 0, 5, 65533, 0, 6, 65533, 536870912, 65530, 65533, 0, 65531, 65533, 0, 65533, 65533, 0, 65535, 65533, 0, 0, 65534, 0, 2, 65534, 537919488, 3, 65534, 0, 7, 65534, 536870912, 65530, 65534, 0, 65533, 65534, 0, 0, 65535, 0, 1, 65535, -1072693248, 2, 65535, 0, 8, 65535, 536870912, 65530, 65535, 0, 65532, 65535, 0, 65533, 65535, 0, 65534, 65535, 537919488 )
+"cells": PoolIntArray( 0, 0, 0, 1, 0, 0, 9, 0, 0, 65530, 0, 0, 65532, 0, 0, 65533, 0, 0, 65534, 0, 0, 9, 1, 0, 65530, 1, 0, 0, 2, 0, 1, 2, 0, 9, 2, 0, 65530, 2, 0, 65531, 2, 0, 65532, 2, 0, 65533, 2, 0, 65534, 2, 0, 65535, 2, 0, 1, 3, 1048576, 2, 3, 0, 8, 3, 0, 2, 4, 1048576, 3, 4, 1048576, 7, 4, 0, 3, 5, 1048576, 4, 5, 0, 5, 5, 0, 6, 5, 1048576, 0, 65528, 0, 65530, 65528, 0, 65531, 65528, 0, 65532, 65528, 0, 65533, 65528, 0, 65534, 65528, 0, 65535, 65528, 0, 0, 65529, 0, 65530, 65529, 0, 0, 65530, 0, 65530, 65530, 0, 65532, 65530, 0, 65533, 65530, 0, 65534, 65530, 0, 0, 65531, 0, 65530, 65531, 0, 65532, 65531, 0, 65533, 65531, 0, 65534, 65531, 0, 0, 65532, 0, 65530, 65532, 0, 65533, 65532, 0, 0, 65533, 0, 3, 65533, 1048576, 4, 65533, 0, 5, 65533, 0, 6, 65533, 0, 65530, 65533, 0, 65531, 65533, 0, 65533, 65533, 0, 65535, 65533, 0, 0, 65534, 0, 2, 65534, 1048576, 3, 65534, 0, 7, 65534, 0, 65530, 65534, 0, 65533, 65534, 0, 0, 65535, 0, 1, 65535, 1048576, 2, 65535, 0, 8, 65535, 0, 65530, 65535, 0, 65532, 65535, 0, 65533, 65535, 0, 65534, 65535, 1048576 )
 }
 __meta__ = {
 "_editor_clip_": 0
@@ -169,7 +170,7 @@ __meta__ = {
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 1 )
 mesh_library = ExtResource( 6 )
 data = {
-"cells": PoolIntArray( 0, 0, 537526272, 65533, 0, 538312704, 65533, 2, 537919488, 0, 65532, 537526272, 65530, 65532, 536870912, 65533, 65532, 537526272, 65533, 65533, 536870912, 0, 65534, 537526272, 65530, 65534, 536870912, 65533, 65534, -1073086464 )
+"cells": PoolIntArray( 0, 0, 655360, 65533, 0, 1441792, 65533, 2, 1048576, 0, 65532, 655360, 65530, 65532, 0, 65533, 65532, 655360, 65533, 65533, 0, 0, 65534, 655360, 65530, 65534, 0, 65533, 65534, 655360 )
 }
 __meta__ = {
 "_editor_clip_": 0
@@ -184,17 +185,52 @@ __meta__ = {
 "_editor_clip_": 0
 }
 
-[node name="ceiling" type="GridMap" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1 )
-mesh_library = ExtResource( 7 )
-collision_layer = 2
-collision_mask = 2
-data = {
-"cells": PoolIntArray( 65535, 65532, 536870912, 65535, 65534, 0 )
-}
-__meta__ = {
-"_editor_clip_": 0
-}
+[node name="Ceiling" type="Spatial" parent="."]
+
+[node name="ceiling light" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -2 )
+
+[node name="ceiling light2" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4 )
+
+[node name="ceiling light3" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 4 )
+
+[node name="ceiling light4" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, -2 )
+
+[node name="ceiling light5" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6 )
+
+[node name="ceiling light6" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -12 )
+
+[node name="ceiling light7" parent="Ceiling" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, -6 )
+
+[node name="ceiling panel" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 2, 1 )
+
+[node name="ceiling panel2" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, -4, 2, -4 )
+
+[node name="ceiling panel3" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 3, 0, 2, -10 )
+
+[node name="ceiling panel4" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, -8, 2, 1 )
+
+[node name="ceiling panel5" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 3, -8, 2, -10 )
+
+[node name="ceiling panel6" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -12 )
+
+[node name="ceiling panel7" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, -12 )
+
+[node name="ceiling panel8" parent="Ceiling" instance=ExtResource( 8 )]
+transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 4 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

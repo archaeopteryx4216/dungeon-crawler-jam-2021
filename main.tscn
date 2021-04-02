@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -6,8 +6,6 @@
 [ext_resource path="res://crosshairs.png" type="Texture" id=4]
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
 [ext_resource path="res://details_mesh_library.tres" type="MeshLibrary" id=6]
-[ext_resource path="res://ceiling light.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ceiling panel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
 
 [node name="Control" type="Control"]
@@ -186,53 +184,6 @@ data = {
 __meta__ = {
 "_editor_clip_": 0
 }
-
-[node name="Ceiling" type="Spatial" parent="."]
-
-[node name="ceiling light" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -2 )
-
-[node name="ceiling light2" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4 )
-
-[node name="ceiling light3" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 4 )
-
-[node name="ceiling light4" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, -2 )
-
-[node name="ceiling light5" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6 )
-
-[node name="ceiling light6" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, -12 )
-
-[node name="ceiling light7" parent="Ceiling" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, -6 )
-
-[node name="ceiling panel" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 2, 1 )
-
-[node name="ceiling panel2" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, -4, 2, -4 )
-
-[node name="ceiling panel3" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 3, 0, 2, -10 )
-
-[node name="ceiling panel4" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 2, -8, 2, 1 )
-
-[node name="ceiling panel5" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 3, -8, 2, -10 )
-
-[node name="ceiling panel6" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -12 )
-
-[node name="ceiling panel7" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, -12 )
-
-[node name="ceiling panel8" parent="Ceiling" instance=ExtResource( 8 )]
-transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 4 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

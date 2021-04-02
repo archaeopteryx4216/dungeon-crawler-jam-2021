@@ -13,6 +13,7 @@ export var player_facing = NORTH
 
 func _ready():
 	$"side_view/player_sprite".position = Vector2(128,128)
+	$"enemies/enemy".set_home_position(Vector3(12,8,0))
 
 func _input(event):
 	#if event && !event.echo && event.pressed:
@@ -42,6 +43,8 @@ func update_cameras(pos_change, turn_rads):
 	$"side_view/player_sprite".position = Vector2(0,0)
 	$"side_view/player_sprite".set_rotation($"side_view/player_sprite".get_rotation() - turn_rads.y)
 	$"side_view/player_sprite".position = Vector2(128,128)
+	# Notify the enemy of the player's position
+	$"enemies/enemy".set_player_position($"main_view/firstperson_viewport/firstperson_pos".get_translation())
 
 func move(player_dir):
 	var pos_change = Vector3(0, 0, 0)

@@ -85,18 +85,21 @@ playing = true
 
 [node name="attacking" type="AnimatedSprite3D" parent="."]
 visible = false
+layers = 2
 pixel_size = 0.015
 frames = SubResource( 2 )
-frame = 1
+frame = 3
 playing = true
 
 [node name="dying" type="AnimatedSprite3D" parent="."]
 visible = false
+layers = 2
 pixel_size = 0.015
 frames = SubResource( 3 )
 
 [node name="dead" type="AnimatedSprite3D" parent="."]
 visible = false
+layers = 2
 pixel_size = 0.015
 frames = SubResource( 4 )
 [connection signal="timeout" from="action_timer" to="." method="_on_action_timer_timeout"]

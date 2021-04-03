@@ -1,5 +1,6 @@
 extends Spatial
 
+# Possible directions to face
 enum {
 	NORTH,
 	EAST,
@@ -7,41 +8,52 @@ enum {
 	WEST
 }
 
+# Possible AI/Animation states
 enum {
 	CHASE,
 	ATTACK,
 	SCATTER,
-	FRIGHTENED
+	FRIGHTENED,
+	DYING,
+	DEAD
 }
+
+# Global Vars
 var player_position
 var home_position
 var facing
 var target_position = Vector3(0,0,0)
 var mode
 
+# Initialize the enemy
 func _ready():
 	facing = SOUTH
 	mode = CHASE
 	home_position = Vector3(0,0,0)
 	target_position = home_position
 
+# Update the target position each frame
 func _process(_delta):
 	# Get the position of the player and set it as the target
 	if mode == CHASE or mode == ATTACK:
 		target_position = player_position
 
+# Notify the enemy of the player's position
 func set_player_position(pos):
 	player_position = pos
 
+# Set the home point for the enemy (for use in scatter mode)
 func set_home_position(pos):
 	home_position = pos
 
+# Update all collision detection rays
 func force_update_all_raycast():
 	$"./front_ray".force_raycast_update()
 	$"./left_ray".force_raycast_update()
 	$"./right_ray".force_raycast_update()
 	$"./back_ray".force_raycast_update()
 
+# AI movement for the chase mode
 func chase():
 	# Step 0) Verify that the target is not null
 	if target_position == null:
@@ -54,7 +66,10 @@ func chase():
 		return
 	set_translation(position)
 	force_update_all_raycast()
-	# Step 2) Check forward left and right to see options for movement
+	# Step 2) Check forward, left, and right to see options for movement
+	# Note: Also checking reverse (Different from pacman AI!) to avoid
+	# being stuck going one way down a long coridor. Downside is that the alien
+	# can now get trapped if the player is in a separate parallel coridor.
 	var turn_options = []
 	if !$"./front_ray".is_colliding():
 		turn_options.append("no_turn")
@@ -81,15 +96,19 @@ func chase():
 		# At this point chosen_direction is where we should turn
 		turn(chosen_direction)
 
+# AI Actions for the attack mode
 func attack():
 	pass
 
+# AI Actions for the scatter mode
 func scatter():
 	pass
-	
+
+# AI Actions for the frightened mode
 func flee():
 	pass
 
+# Take an AI action each time the timer expires
 func _on_action_timer_timeout():
 	if mode == CHASE:
 		print("CHASE")
@@ -110,6 +129,8 @@ func _on_action_timer_timeout():
 	elif mode == FRIGHTENED:
 		flee()
 
+# Given the current facing (stored in a global) and the turn direction,
+# what is the new facing?
 func turn_updated_facing(direction):
 	if direction == "left":
 		if facing == NORTH:
@@ -140,6 +161,8 @@ func turn_updated_facing(direction):
 			return WEST
 	return facing
 
+# Given a position and a cardinal direction, returns a position after a step is
+# taken in that direction
 func take_step(position, direction):
 	if direction == NORTH:
 		return position + Vector3(0,0,-2)
@@ -151,6 +174,7 @@ func take_step(position, direction):
 		return position + Vector3(0,0,2)
 		
 
+# Update the current facing and rotate the enemy sprites.
 func turn(direction):
 	facing = turn_updated_facing(direction)
 	if direction == "left":

@@ -96,14 +96,14 @@ func _on_action_timer_timeout():
 		$"./walking".visible = true
 		$"./attacking".visible = false
 		chase()
-		if get_translation().distance_to(target_position) < 3:
+		if target_position != null and get_translation().distance_to(target_position) < 3:
 			mode = ATTACK
 	elif mode == ATTACK:
 		print("ATTACK")
 		$"./walking".visible = false
 		$"./attacking".visible = true
 		attack()
-		if get_translation().distance_to(target_position) >= 3:
+		if target_position != null and get_translation().distance_to(target_position) >= 3:
 			mode = CHASE
 	elif mode == SCATTER:
 		scatter()

@@ -46,7 +46,14 @@ func update_cameras(pos_change, turn_rads):
 	# Notify the enemy of the player's position
 	$"enemies/enemy".set_player_position($"main_view/firstperson_viewport/firstperson_pos".get_translation())
 
+func force_update_all_raycast():
+	$main_view/firstperson_viewport/firstperson_pos/back_ray.force_raycast_update()
+	$main_view/firstperson_viewport/firstperson_pos/front_ray.force_raycast_update()
+	$main_view/firstperson_viewport/firstperson_pos/left_ray.force_raycast_update()
+	$main_view/firstperson_viewport/firstperson_pos/right_ray.force_raycast_update()
+
 func move(player_dir):
+	force_update_all_raycast()
 	var pos_change = Vector3(0, 0, 0)
 	if player_dir == "move_up" and !$main_view/firstperson_viewport/firstperson_pos/front_ray.is_colliding():
 		if player_facing == NORTH:

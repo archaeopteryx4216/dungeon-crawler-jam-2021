@@ -1,4 +1,4 @@
-extends Sprite3D
+extends Spatial
 
 enum {
 	NORTH,
@@ -9,6 +9,7 @@ enum {
 
 enum {
 	CHASE,
+	ATTACK,
 	SCATTER,
 	FRIGHTENED
 }
@@ -25,8 +26,8 @@ func _ready():
 	target_position = home_position
 
 func _process(_delta):
-	if mode == CHASE:
-		# Get the position of the player and set it as the target
+	# Get the position of the player and set it as the target
+	if mode == CHASE or mode == ATTACK:
 		target_position = player_position
 
 func set_player_position(pos):
@@ -41,13 +42,16 @@ func force_update_all_raycast():
 	$"./right_ray".force_raycast_update()
 	$"./back_ray".force_raycast_update()
 
-func move_enemy():
+func chase():
 	# Step 0) Verify that the target is not null
 	if target_position == null:
 		return
 	# Step 1) Take a step forward
 	var position = get_translation()
 	position = take_step(position, facing)
+	# Step 1.5) If we are right in front of the player, stop!
+	if position == target_position:
+		return
 	set_translation(position)
 	force_update_all_raycast()
 	# Step 2) Check forward left and right to see options for movement
@@ -77,8 +81,34 @@ func move_enemy():
 		# At this point chosen_direction is where we should turn
 		turn(chosen_direction)
 
+func attack():
+	pass
+
+func scatter():
+	pass
+	
+func flee():
+	pass
+
 func _on_action_timer_timeout():
-	move_enemy()
+	if mode == CHASE:
+		print("CHASE")
+		$"./walking".visible = true
+		$"./attacking".visible = false
+		chase()
+		if get_translation().distance_to(target_position) < 3:
+			mode = ATTACK
+	elif mode == ATTACK:
+		print("ATTACK")
+		$"./walking".visible = false
+		$"./attacking".visible = true
+		attack()
+		if get_translation().distance_to(target_position) >= 3:
+			mode = CHASE
+	elif mode == SCATTER:
+		scatter()
+	elif mode == FRIGHTENED:
+		flee()
 
 func turn_updated_facing(direction):
 	if direction == "left":
@@ -122,10 +152,7 @@ func take_step(position, direction):
 		
 
 func turn(direction):
-	prints("Turn direction:", direction)
-	prints("Facing prior to turn:", facing)
 	facing = turn_updated_facing(direction)
-	prints("Facing after the turn:", facing)
 	if direction == "left":
 		set_rotation(get_rotation() + Vector3(0,PI/2,0))
 	elif direction == "right":

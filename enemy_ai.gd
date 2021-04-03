@@ -15,11 +15,11 @@ enum {
 var player_position
 var home_position
 var facing
-var target_position
+var target_position = Vector3(0,0,0)
 var mode
 
 func _ready():
-	facing = NORTH
+	facing = SOUTH
 	mode = CHASE
 	home_position = Vector3(0,0,0)
 	target_position = home_position
@@ -35,57 +35,50 @@ func set_player_position(pos):
 func set_home_position(pos):
 	home_position = pos
 
-func _on_action_timer_timeout():
-	var next_position = get_translation()
-	var turn_candidates = []
-	if not target_position:
+func force_update_all_raycast():
+	$"./front_ray".force_raycast_update()
+	$"./left_ray".force_raycast_update()
+	$"./right_ray".force_raycast_update()
+	$"./back_ray".force_raycast_update()
+
+func move_enemy():
+	# Step 0) Verify that the target is not null
+	if target_position == null:
 		return
-	# Take a step forward
-	if not $"./front_ray".is_colliding():
-		# Not colliding, so can move
-		if facing == NORTH:
-			next_position += Vector3(0, 0, 2)
-		elif facing == WEST:
-			next_position += Vector3(2, 0, 0)
-		elif facing == SOUTH:
-			next_position += Vector3(0, 0, -2)
-		elif facing == EAST:
-			next_position += Vector3(-2, 0, 0)
-	set_translation(next_position)
-	prints("Moved to:", next_position)
-	# Check neighbor tiles for collisions. If no collisions, we could move there next turn
-	if not $"./front_ray".is_colliding():
-		turn_candidates.append("no_turn")
-	if not $"./left_ray".is_colliding():
-		turn_candidates.append("left")
-	if not $"./right_ray".is_colliding():
-		turn_candidates.append("right")
-	# If there are no options for movement, then reverse
-	if len(turn_candidates) == 0:
+	# Step 1) Take a step forward
+	var position = get_translation()
+	position = take_step(position, facing)
+	set_translation(position)
+	force_update_all_raycast()
+	# Step 2) Check forward left and right to see options for movement
+	var turn_options = []
+	if !$"./front_ray".is_colliding():
+		turn_options.append("no_turn")
+	if !$"./left_ray".is_colliding():
+		turn_options.append("left")
+	if !$"./right_ray".is_colliding():
+		turn_options.append("right")
+	if !$"./back_ray".is_colliding():
+		turn_options.append("reverse")
+	prints("Turn options are:", turn_options)
+	if len(turn_options) == 0:
+		# Step 3) Reverse direction as we are in a dead end
 		turn("reverse")
 	else:
-		# If there are candidates, check each one to see which brings us closest to our target
-		var selected_turn = turn_candidates[0]
-		var shortest_distance = 10000000000
-		for turn in turn_candidates:
-			var new_facing = turn_updated_facing(turn)
-			if new_facing == NORTH:
-				if target_position.distance_to(next_position + Vector3(0, 0, 2)) < shortest_distance:
-					selected_turn = turn
-					shortest_distance = target_position.distance_to(next_position + Vector3(0, 0, 2))
-			elif new_facing == EAST:
-				if target_position.distance_to(next_position + Vector3(-2, 0, 0)) < shortest_distance:
-					selected_turn = turn
-					shortest_distance = target_position.distance_to(next_position + Vector3(-2, 0, 0))
-			elif new_facing == WEST:
-				if target_position.distance_to(next_position + Vector3(2, 0, 0)) < shortest_distance:
-					selected_turn = turn
-					shortest_distance = target_position.distance_to(next_position + Vector3(2, 0, 0))
-			elif new_facing == SOUTH:
-				if target_position.distance_to(next_position + Vector3(0, 0, -2)) < shortest_distance:
-					selected_turn = turn
-					shortest_distance = target_position.distance_to(next_position + Vector3(0, 0, -2))
-		turn(selected_turn)
+		# Step 4) Check each option to find the one closest to the target
+		var smallest_distance = 100000000
+		var chosen_direction = ""
+		for possible_turn in turn_options:
+			var new_cardinal_facing = turn_updated_facing(possible_turn)
+			var distance_to_target = target_position.distance_to(take_step(get_translation(), new_cardinal_facing))
+			if distance_to_target < smallest_distance:
+				smallest_distance = distance_to_target
+				chosen_direction = possible_turn
+		# At this point chosen_direction is where we should turn
+		turn(chosen_direction)
+
+func _on_action_timer_timeout():
+	move_enemy()
 
 func turn_updated_facing(direction):
 	if direction == "left":
@@ -117,9 +110,22 @@ func turn_updated_facing(direction):
 			return WEST
 	return facing
 
+func take_step(position, direction):
+	if direction == NORTH:
+		return position + Vector3(0,0,-2)
+	elif direction == EAST:
+		return position + Vector3(2,0,0)
+	elif direction == WEST:
+		return position + Vector3(-2,0,0)
+	else: # direction == SOUTH
+		return position + Vector3(0,0,2)
+		
+
 func turn(direction):
-	prints("Now turning", direction)
+	prints("Turn direction:", direction)
+	prints("Facing prior to turn:", facing)
 	facing = turn_updated_facing(direction)
+	prints("Facing after the turn:", facing)
 	if direction == "left":
 		set_rotation(get_rotation() + Vector3(0,PI/2,0))
 	elif direction == "right":

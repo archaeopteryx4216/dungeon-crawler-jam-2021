@@ -131,3 +131,4 @@ func _on_move_back_pressed():
 
 func _on_move_right_pressed():
 	update_cameras(move("move_right"), Vector3(0, 0, 0))
+

@@ -9,6 +9,7 @@ enum {
 
 # Global vars
 var player_health = 100
+var fuel = 0
 var game_over = false
 var player_facing = NORTH
 
@@ -155,8 +156,14 @@ func _on_attacked(enemy_position, attack_strength):
 	if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(enemy_position) < 3:
 		player_health -= attack_strength
 		if player_health < 0:
+			player_health = 0
+		if player_health <= 0:
 			game_over = true
 			$game_over_message.visible = true
 
 func _on_retry_button_pressed():
 	get_tree().change_scene("res://main.tscn")
+	
+func _process(_delta):
+	$player_stat_display/armor_stat.text = "Armor: {str}%".format({"str":player_health})
+	$player_stat_display/fuel_stat.text = "Fuel: {str}%".format({"str":fuel})

@@ -221,6 +221,30 @@ margin_top = 142.836
 margin_right = 435.323
 margin_bottom = 162.836
 text = "Retry"
+
+[node name="player_stat_display" type="Control" parent="."]
+margin_left = 572.0
+margin_top = 380.0
+margin_right = 828.0
+margin_bottom = 500.0
+
+[node name="armor_stat" type="Label" parent="player_stat_display"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Armor: 100%"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="fuel_stat" type="Label" parent="player_stat_display"]
+margin_left = 1.88782
+margin_top = 27.3724
+margin_right = 56.8878
+margin_bottom = 41.3724
+text = "Fuel: 0%"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

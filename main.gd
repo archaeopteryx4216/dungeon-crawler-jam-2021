@@ -40,10 +40,13 @@ func _input(event):
 		update_cameras(Vector3(0,0,0), Vector3(0, -PI/2, 0))
 
 func update_cameras(pos_change, turn_rads):
-	# Move first person camera
-	$"main_view/firstperson_viewport/firstperson_pos".set_translation($"main_view/firstperson_viewport/firstperson_pos".get_translation() + pos_change)
-	# Move overhead camera
-	$"side_view/overhead_viewport/overhead_pos".set_translation($"side_view/overhead_viewport/overhead_pos".get_translation() + pos_change)
+	# Check if we will intersect the enemy, if so, skip the movement
+	var next_position = $"main_view/firstperson_viewport/firstperson_pos".get_translation() + pos_change
+	if next_position.distance_to($enemies/enemy.get_translation()) > 1:
+		# Move first person camera
+		$"main_view/firstperson_viewport/firstperson_pos".set_translation(next_position)
+		# Move overhead camera
+		$"side_view/overhead_viewport/overhead_pos".set_translation($"side_view/overhead_viewport/overhead_pos".get_translation() + pos_change)
 	# Set first person camera rotation
 	$"main_view/firstperson_viewport/firstperson_pos".set_rotation($"main_view/firstperson_viewport/firstperson_pos".get_rotation() + turn_rads)
 	# Rotate player sprite in side view

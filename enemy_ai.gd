@@ -1,5 +1,7 @@
 extends Spatial
 
+signal attacked(enemy_position, attack_strength)
+
 # Possible directions to face
 enum {
 	NORTH,
@@ -17,6 +19,9 @@ enum {
 	DYING,
 	DEAD
 }
+
+# Exported global vars
+export var attack_strength = 10
 
 # Global Vars
 var player_position
@@ -37,6 +42,8 @@ func _process(_delta):
 	# Get the position of the player and set it as the target
 	if mode == CHASE or mode == ATTACK:
 		target_position = player_position
+	elif mode == SCATTER:
+		target_position = home_position
 
 # Notify the enemy of the player's position
 func set_player_position(pos):
@@ -52,6 +59,18 @@ func force_update_all_raycast():
 	$"./left_ray".force_raycast_update()
 	$"./right_ray".force_raycast_update()
 	$"./back_ray".force_raycast_update()
+
+func gather_turn_options():
+	var turn_options = []
+	if !$"./front_ray".is_colliding():
+		turn_options.append("no_turn")
+	if !$"./left_ray".is_colliding():
+		turn_options.append("left")
+	if !$"./right_ray".is_colliding():
+		turn_options.append("right")
+	if !$"./back_ray".is_colliding():
+		turn_options.append("reverse")
+	return turn_options
 
 # AI movement for the chase mode
 func chase():
@@ -70,16 +89,7 @@ func chase():
 	# Note: Also checking reverse (Different from pacman AI!) to avoid
 	# being stuck going one way down a long coridor. Downside is that the alien
 	# can now get trapped if the player is in a separate parallel coridor.
-	var turn_options = []
-	if !$"./front_ray".is_colliding():
-		turn_options.append("no_turn")
-	if !$"./left_ray".is_colliding():
-		turn_options.append("left")
-	if !$"./right_ray".is_colliding():
-		turn_options.append("right")
-	if !$"./back_ray".is_colliding():
-		turn_options.append("reverse")
-	prints("Turn options are:", turn_options)
+	var turn_options = gather_turn_options()
 	if len(turn_options) == 0:
 		# Step 3) Reverse direction as we are in a dead end
 		turn("reverse")
@@ -98,7 +108,7 @@ func chase():
 
 # AI Actions for the attack mode
 func attack():
-	pass
+	emit_signal("attacked", get_translation(), attack_strength)
 
 # AI Actions for the scatter mode
 func scatter():
@@ -106,27 +116,50 @@ func scatter():
 
 # AI Actions for the frightened mode
 func flee():
-	pass
+	# Step 0) Verify that the target is not null
+	if target_position == null:
+		return
+	# Step 1) Take a step forward
+	var position = get_translation()
+	position = take_step(position, facing)
+	# Step 1.5) If we are right in front of the player, stop!
+	if position == target_position:
+		return
+	set_translation(position)
+	force_update_all_raycast()
+	# Step 2) Check forward, left, and right to see options for movement
+	# Note: Also checking reverse (Different from pacman AI!) to avoid
+	# being stuck going one way down a long coridor. Downside is that the alien
+	# can now get trapped if the player is in a separate parallel coridor.
+	var turn_options = gather_turn_options()
+	if len(turn_options) == 0:
+		turn("reverse")
+	else:
+		# Step 4) Pick a random option since we are fleeing
+		turn_options.shuffle()
+		turn(turn_options[0])
 
 # Take an AI action each time the timer expires
 func _on_action_timer_timeout():
 	if mode == CHASE:
-		print("CHASE")
 		$"./walking".visible = true
 		$"./attacking".visible = false
 		chase()
 		if target_position != null and get_translation().distance_to(target_position) < 3:
 			mode = ATTACK
 	elif mode == ATTACK:
-		print("ATTACK")
 		$"./walking".visible = false
 		$"./attacking".visible = true
 		attack()
 		if target_position != null and get_translation().distance_to(target_position) >= 3:
 			mode = CHASE
 	elif mode == SCATTER:
+		$"./walking".visible = true
+		$"./attacking".visible = false
 		scatter()
 	elif mode == FRIGHTENED:
+		$"./walking".visible = true
+		$"./attacking".visible = false
 		flee()
 
 # Given the current facing (stored in a global) and the turn direction,
@@ -183,3 +216,4 @@ func turn(direction):
 		set_rotation(get_rotation() + Vector3(0,-PI/2,0))
 	elif direction == "reverse":
 		set_rotation(get_rotation() + Vector3(0,PI,0))
+

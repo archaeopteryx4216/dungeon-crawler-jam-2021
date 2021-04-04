@@ -7,16 +7,23 @@ enum {
 	WEST
 }
 
-var colision_count = 0
-
-export var player_facing = NORTH
+# Global vars
+var player_health = 100
+var game_over = false
+var player_facing = NORTH
 
 func _ready():
+	$"enemies/enemy".connect("attacked", self, "_on_attacked")
 	$"side_view/player_sprite".position = Vector2(128,128)
 	$"enemies/enemy".set_home_position(Vector3(12,8,0))
 
 func _input(event):
-	#if event && !event.echo && event.pressed:
+	# Always check for the escape key to quit
+	if Input.is_key_pressed(KEY_ESCAPE):
+		get_tree().quit()
+	# If the game is over, skip processing the below keys
+	if game_over:
+		return
 	if event.is_action_pressed("move_up"):
 		update_cameras(move("move_up"), Vector3(0,0,0))
 	elif event.is_action_pressed("move_down"):
@@ -115,27 +122,38 @@ func turn(dir):
 
 
 func _on_turn_left_pressed():
-	turn("turn_left")
-	update_cameras(Vector3(0,0,0), Vector3(0, PI/2, 0))
+	if not game_over:
+		turn("turn_left")
+		update_cameras(Vector3(0,0,0), Vector3(0, PI/2, 0))
 
 
 func _on_move_up_pressed():
-	update_cameras(move("move_up"), Vector3(0, 0, 0))
-
+	if not game_over:
+		update_cameras(move("move_up"), Vector3(0, 0, 0))
 
 func _on_turn_right_pressed():
-	turn("turn_right")
-	update_cameras(Vector3(0,0,0), Vector3(0, -PI/2, 0))
-
+	if not game_over:
+		turn("turn_right")
+		update_cameras(Vector3(0,0,0), Vector3(0, -PI/2, 0))
 
 func _on_move_left_pressed():
-	update_cameras(move("move_left"), Vector3(0, 0, 0))
-
+	if not game_over:
+		update_cameras(move("move_left"), Vector3(0, 0, 0))
 
 func _on_move_back_pressed():
-	update_cameras(move("move_down"), Vector3(0, 0, 0))
-
+	if not game_over:
+		update_cameras(move("move_down"), Vector3(0, 0, 0))
 
 func _on_move_right_pressed():
-	update_cameras(move("move_right"), Vector3(0, 0, 0))
+	if not game_over:
+		update_cameras(move("move_right"), Vector3(0, 0, 0))
 
+func _on_attacked(enemy_position, attack_strength):
+	if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(enemy_position) < 3:
+		player_health -= attack_strength
+		if player_health < 0:
+			game_over = true
+			$game_over_message.visible = true
+
+func _on_retry_button_pressed():
+	get_tree().change_scene("res://main.tscn")

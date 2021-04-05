@@ -1,42 +1,75 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://3D_Sprites/particles/white_circle_32_32.png" type="Texture" id=1]
+[ext_resource path="res://3D_Sprites/particles/fireparticles.png" type="Texture" id=1]
 [ext_resource path="res://flame.gd" type="Script" id=2]
 
 [sub_resource type="Gradient" id=1]
-offsets = PoolRealArray( 0, 0.192593, 0.42963, 0.681481, 0.940741 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 0.956863, 0, 1, 1, 0.486275, 0, 1, 1, 0, 0, 1, 0.215686, 0.215686, 0.215686, 1 )
+offsets = PoolRealArray( 0, 0.185185, 0.437037, 0.696296, 0.874074, 0.933333, 1 )
+colors = PoolColorArray( 0, 0.953125, 1, 1, 0, 1, 0.625, 1, 1, 0.984375, 0, 1, 1, 0.609375, 0, 1, 1, 0.375, 0, 1, 0.502441, 0.122176, 0, 1, 0.984375, 0.00769043, 0.00769043, 1 )
 
 [sub_resource type="GradientTexture" id=2]
 gradient = SubResource( 1 )
 
-[sub_resource type="ParticlesMaterial" id=3]
-direction = Vector3( 1, 0.14, 0 )
-spread = 30.0
-flatness = 0.5
-gravity = Vector3( 0, -1, 0 )
-initial_velocity = 5.0
-angular_velocity = 100.0
-radial_accel = 1.0
-color_ramp = SubResource( 2 )
+[sub_resource type="Curve" id=3]
+min_value = -200.0
+max_value = 200.0
+_data = [ Vector2( 0, 16.8182 ), 0.0, 0.0, 0, 0, Vector2( 1, -37.7273 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0 ), 0.0, -0.0426643, 0, 0, Vector2( 0.772152, 0.245455 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.681818 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+trail_divisor = 3
+emission_shape = 1
+emission_sphere_radius = 0.01
+direction = Vector3( 1, 0.1, 0 )
+spread = 5.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 5.0
+initial_velocity_random = 0.1
+angular_velocity = 45.0
+angular_velocity_random = 1.0
+linear_accel = 6.0
+linear_accel_random = 1.0
+linear_accel_curve = SubResource( 4 )
+angle = 360.0
+angle_random = 1.0
+scale_random = 0.8
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 2 )
+anim_speed = 1.0
+anim_offset = 1.0
+anim_offset_random = 1.0
+
+[sub_resource type="SpatialMaterial" id=8]
 flags_transparent = true
 flags_unshaded = true
 vertex_color_use_as_albedo = true
-params_billboard_mode = 1
+params_blend_mode = 1
+params_billboard_mode = 3
+particles_anim_h_frames = 4
+particles_anim_v_frames = 4
+particles_anim_loop = false
 albedo_texture = ExtResource( 1 )
 
-[sub_resource type="QuadMesh" id=5]
-material = SubResource( 4 )
-size = Vector2( 0.1, 0.14 )
+[sub_resource type="QuadMesh" id=9]
+material = SubResource( 8 )
 
 [node name="flame" type="Spatial"]
 script = ExtResource( 2 )
 
 [node name="Particles" type="Particles" parent="."]
 emitting = false
-amount = 2000
+amount = 200
+lifetime = 0.5
+randomness = 1.0
 local_coords = false
-process_material = SubResource( 3 )
-draw_pass_1 = SubResource( 5 )
+draw_order = 2
+process_material = SubResource( 7 )
+draw_pass_1 = SubResource( 9 )

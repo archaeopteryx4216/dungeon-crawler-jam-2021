@@ -20,6 +20,14 @@ func _ready():
 	$"enemies/enemy".connect("attacked", self, "_on_attacked")
 	$"side_view/player_sprite".position = Vector2(128,128)
 	$"enemies/enemy".set_home_position(Vector3(12,8,0))
+	# Setup gascan signals
+	$fuel_cans/gas_can1.connect("get_fuel", self, "_on_get_fuel")
+	$fuel_cans/gas_can2.connect("get_fuel", self, "_on_get_fuel")
+
+func pickup_gas_can():
+	for gas_can in $"fuel_cans".get_children():
+		if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(gas_can.get_translation()) < 1:
+			gas_can.pickup()
 
 func _input(event):
 	# Always check for the escape key to quit
@@ -42,22 +50,6 @@ func _input(event):
 	elif event.is_action_pressed("turn_right"):
 		turn("turn_right")
 		update_cameras(Vector3(0,0,0), Vector3(0, -PI/2, 0))
-	elif event is InputEventMouseButton and event.pressed:
-		firing_flamethrower = true
-
-func _physics_process(_delta):
-	if firing_flamethrower:
-		fire_flamethrower()
-		firing_flamethrower = false
-
-func fire_flamethrower():
-	var mouse_pos = $main_view/firstperson_viewport.get_mouse_position()
-	if mouse_pos.x > 0 and mouse_pos.x < 512 and mouse_pos.y > 0 and mouse_pos.y < 512:
-		var ray_from = $main_view/firstperson_viewport/firstperson_pos/firstperson_camera.project_ray_origin(mouse_pos)
-		var ray_to = ray_from + $main_view/firstperson_viewport/firstperson_pos/firstperson_camera.project_ray_normal(mouse_pos) * flamethrower_range
-		var space_state = $main_view/firstperson_viewport/firstperson_pos.get_world().direct_space_state
-		var selection = space_state.intersect_ray(ray_from, ray_to, [self])
-		prints("Selection: ",selection)
 
 func update_cameras(pos_change, turn_rads):
 	# Check if we will intersect the enemy, if so, skip the movement
@@ -185,4 +177,8 @@ func _on_retry_button_pressed():
 	
 func _process(_delta):
 	$player_stat_display/armor_stat.text = "Armor: {str}%".format({"str":player_health})
-	$player_stat_display/fuel_stat.text = "Fuel: {str}%".format({"str":fuel})
+	$player_stat_display/fuel_stat.text = "Fuel: {str}ml".format({"str":fuel})
+	pickup_gas_can()
+
+func _on_get_fuel(ammount):
+	fuel += ammount

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
 [ext_resource path="res://details_mesh_library.tres" type="MeshLibrary" id=6]
 [ext_resource path="res://enemy.tscn" type="PackedScene" id=7]
+[ext_resource path="res://gas_can.tscn" type="PackedScene" id=8]
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
 
 [sub_resource type="Environment" id=1]
@@ -42,6 +43,7 @@ render_target_update_mode = 3
 [node name="firstperson_pos" type="Spatial" parent="main_view/firstperson_viewport"]
 
 [node name="firstperson_camera" type="Camera" parent="main_view/firstperson_viewport/firstperson_pos"]
+cull_mask = 1048571
 current = true
 fov = 100.0
 
@@ -66,6 +68,7 @@ cast_to = Vector3( 0, 0, 2 )
 collide_with_areas = true
 
 [node name="crosshairs" type="Sprite" parent="main_view"]
+visible = false
 texture = ExtResource( 4 )
 script = ExtResource( 5 )
 
@@ -246,6 +249,15 @@ text = "Fuel: 0%"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="fuel_cans" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
+
+[node name="gas_can1" parent="fuel_cans" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12 )
+
+[node name="gas_can2" parent="fuel_cans" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -12 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

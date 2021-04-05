@@ -75,6 +75,7 @@ collide_with_areas = true
 
 [node name="overhead_arrow" type="Sprite3D" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
+layers = 4
 pixel_size = 0.05
 texture = ExtResource( 3 )
 
@@ -82,6 +83,7 @@ texture = ExtResource( 3 )
 layers = 2
 pixel_size = 0.015
 frames = SubResource( 1 )
+frame = 1
 playing = true
 
 [node name="attacking" type="AnimatedSprite3D" parent="."]
@@ -89,7 +91,7 @@ visible = false
 layers = 2
 pixel_size = 0.015
 frames = SubResource( 2 )
-frame = 2
+frame = 3
 playing = true
 
 [node name="dying" type="AnimatedSprite3D" parent="."]

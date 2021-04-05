@@ -22,6 +22,7 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+flamethrower_range = 10
 
 [node name="main_view" type="ViewportContainer" parent="."]
 margin_left = 30.0

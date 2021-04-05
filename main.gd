@@ -8,10 +8,13 @@ enum {
 }
 
 # Global vars
-var player_health = 100
-var fuel = 0
+export var player_health = 100
+export var fuel = 0
+export var flamethrower_range = 5
+
 var game_over = false
 var player_facing = NORTH
+var firing_flamethrower = true
 
 func _ready():
 	$"enemies/enemy".connect("attacked", self, "_on_attacked")
@@ -39,6 +42,22 @@ func _input(event):
 	elif event.is_action_pressed("turn_right"):
 		turn("turn_right")
 		update_cameras(Vector3(0,0,0), Vector3(0, -PI/2, 0))
+	elif event is InputEventMouseButton and event.pressed:
+		firing_flamethrower = true
+
+func _physics_process(_delta):
+	if firing_flamethrower:
+		fire_flamethrower()
+		firing_flamethrower = false
+
+func fire_flamethrower():
+	var mouse_pos = $main_view/firstperson_viewport.get_mouse_position()
+	if mouse_pos.x > 0 and mouse_pos.x < 512 and mouse_pos.y > 0 and mouse_pos.y < 512:
+		var ray_from = $main_view/firstperson_viewport/firstperson_pos/firstperson_camera.project_ray_origin(mouse_pos)
+		var ray_to = ray_from + $main_view/firstperson_viewport/firstperson_pos/firstperson_camera.project_ray_normal(mouse_pos) * flamethrower_range
+		var space_state = $main_view/firstperson_viewport/firstperson_pos.get_world().direct_space_state
+		var selection = space_state.intersect_ray(ray_from, ray_to, [self])
+		prints("Selection: ",selection)
 
 func update_cameras(pos_change, turn_rads):
 	# Check if we will intersect the enemy, if so, skip the movement

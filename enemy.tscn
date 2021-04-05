@@ -51,6 +51,7 @@ animations = [ {
 script = ExtResource( 2 )
 
 [node name="action_timer" type="Timer" parent="."]
+wait_time = 0.5
 autostart = true
 
 [node name="front_ray" type="RayCast" parent="."]
@@ -107,8 +108,10 @@ pixel_size = 0.015
 frames = SubResource( 4 )
 
 [node name="Area" type="Area" parent="."]
+visible = false
 
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 transform = Transform( 0.75, 0, 0, 0, -8.14603e-08, -0.5, 0, 0.5, -8.14603e-08, 0, -0.2, 0 )
+visible = false
 shape = SubResource( 5 )
 [connection signal="timeout" from="action_timer" to="." method="_on_action_timer_timeout"]

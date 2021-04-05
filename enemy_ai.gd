@@ -217,3 +217,5 @@ func turn(direction):
 	elif direction == "reverse":
 		set_rotation(get_rotation() + Vector3(0,PI,0))
 
+func _on_flamethrower(positions):
+	print("Hey, the flamethrower is on!")

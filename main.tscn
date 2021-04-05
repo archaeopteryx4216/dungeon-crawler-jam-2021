@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://enemy.tscn" type="PackedScene" id=7]
 [ext_resource path="res://gas_can.tscn" type="PackedScene" id=8]
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
+[ext_resource path="res://flame.tscn" type="PackedScene" id=10]
 
 [sub_resource type="Environment" id=1]
 
@@ -66,6 +67,9 @@ collide_with_areas = true
 enabled = true
 cast_to = Vector3( 0, 0, 2 )
 collide_with_areas = true
+
+[node name="flame" parent="main_view/firstperson_viewport/firstperson_pos" instance=ExtResource( 10 )]
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, -0.5, 0 )
 
 [node name="crosshairs" type="Sprite" parent="main_view"]
 visible = false

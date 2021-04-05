@@ -35,6 +35,7 @@ size = Vector2( 0.1, 0.14 )
 script = ExtResource( 2 )
 
 [node name="Particles" type="Particles" parent="."]
+emitting = false
 amount = 2000
 local_coords = false
 process_material = SubResource( 3 )

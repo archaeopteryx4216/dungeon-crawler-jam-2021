@@ -59,11 +59,10 @@ func _input(event):
 		turn("turn_right")
 		update_cameras(Vector3(0,0,0), Vector3(0, -PI/2, 0))
 	elif event.is_action_pressed("fire"):
-		if not flamethrower_on and fuel > 0:
+		if fuel > 0:
 			flamethrower_on = true
 	elif event.is_action_released("fire"):
-		if flamethrower_on:
-			flamethrower_on = false
+		flamethrower_on = false
 
 func overlapping_an_enemy(position):
 	for enemy in $enemies.get_children():
@@ -199,13 +198,26 @@ func _on_attacked(enemy_position, attack_strength):
 
 func _on_retry_button_pressed():
 	get_tree().change_scene("res://main.tscn")
-	
+
+# Distance multiplier should be a positive integer
+# This function returns the point <distance_multiplier> grid squares ahead of the player
+func get_point_ahead_of_player(distance_multiplier):
+	if player_facing == NORTH:
+		return $main_view/firstperson_viewport/firstperson_pos.get_translation() +  Vector3(0,0,-2)*distance_multiplier
+	elif player_facing == SOUTH:
+		return $main_view/firstperson_viewport/firstperson_pos.get_translation() + Vector3(0,0,2)*distance_multiplier
+	elif player_facing == EAST:
+		return $main_view/firstperson_viewport/firstperson_pos.get_translation() + Vector3(2,0,0)*distance_multiplier
+	else: # player_facing == WEST
+		return $main_view/firstperson_viewport/firstperson_pos.get_translation() + Vector3(-2,0,0)*distance_multiplier
+
 func _process(_delta):
 	$player_stat_display/armor_stat.text = "Armor: {str}%".format({"str":player_health})
 	$player_stat_display/fuel_stat.text = "Fuel: {str}ml".format({"str":fuel})
 	pickup_gas_can()
 	if fuel > 0 and flamethrower_on:
 		fuel -= 0.1
+		emit_signal("flamethrower_on", [get_point_ahead_of_player(1), get_point_ahead_of_player(2), get_point_ahead_of_player(3)])
 		if not flames_visible:
 			$main_view/firstperson_viewport/firstperson_pos/flame.turn_on()
 			flames_visible = true

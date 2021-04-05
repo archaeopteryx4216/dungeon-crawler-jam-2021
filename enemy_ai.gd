@@ -21,7 +21,8 @@ enum {
 }
 
 # Exported global vars
-export var attack_strength = 10
+export var attack_strength = 5
+export var health = 100
 
 # Global Vars
 var player_position
@@ -218,4 +219,7 @@ func turn(direction):
 		set_rotation(get_rotation() + Vector3(0,PI,0))
 
 func _on_flamethrower(positions):
-	print("Hey, the flamethrower is on!")
+	for pos in positions:
+		if get_translation().distance_to(pos) < 1:
+			health -= 1
+			break

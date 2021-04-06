@@ -101,6 +101,8 @@ func move(player_dir):
 	force_update_all_raycast()
 	var pos_change = Vector3(0, 0, 0)
 	if player_dir == "move_up" and !$main_view/firstperson_viewport/firstperson_pos/front_ray.is_colliding():
+		if !$button_container/footsteps.is_playing():
+			$button_container/footsteps.play()
 		if player_facing == NORTH:
 			pos_change = Vector3(0,0,-2)
 		elif player_facing == SOUTH:
@@ -110,6 +112,8 @@ func move(player_dir):
 		else:
 			pos_change = Vector3(-2,0,0)
 	elif player_dir == "move_down" and !$main_view/firstperson_viewport/firstperson_pos/back_ray.is_colliding():
+		if !$button_container/footsteps.is_playing():
+			$button_container/footsteps.play()
 		if player_facing == NORTH:
 			pos_change = Vector3(0,0,2)
 		elif player_facing == SOUTH:
@@ -119,6 +123,8 @@ func move(player_dir):
 		else:
 			pos_change = Vector3(2,0,0)
 	elif player_dir == "move_left" and !$main_view/firstperson_viewport/firstperson_pos/left_ray.is_colliding():
+		if !$button_container/footsteps.is_playing():
+			$button_container/footsteps.play()
 		if player_facing == NORTH:
 			pos_change = Vector3(-2,0,0)
 		elif player_facing == SOUTH:
@@ -128,6 +134,8 @@ func move(player_dir):
 		else:
 			pos_change = Vector3(0,0,2)
 	elif player_dir == "move_right" and !$main_view/firstperson_viewport/firstperson_pos/right_ray.is_colliding():
+		if !$button_container/footsteps.is_playing():
+			$button_container/footsteps.play()
 		if player_facing == NORTH:
 			pos_change = Vector3(2,0,0)
 		elif player_facing == SOUTH:
@@ -216,12 +224,16 @@ func _process(_delta):
 	$player_stat_display/fuel_stat.text = "Fuel: {str}ml".format({"str":fuel})
 	pickup_gas_can()
 	if fuel > 0 and flamethrower_on:
+		if !$main_view/firstperson_viewport/firstperson_pos/flamesfx.is_playing():
+			$main_view/firstperson_viewport/firstperson_pos/flamesfx.play()
 		fuel -= 0.1
 		emit_signal("flamethrower_on", [get_point_ahead_of_player(1), get_point_ahead_of_player(2)])
 		if not flames_visible:
 			$main_view/firstperson_viewport/firstperson_pos/flame.turn_on()
 			flames_visible = true
 	else:
+		if $main_view/firstperson_viewport/firstperson_pos/flamesfx.is_playing():
+			$main_view/firstperson_viewport/firstperson_pos/flamesfx.stop()
 		if fuel <= 0:
 			fuel = 0
 		if flames_visible:

@@ -327,6 +327,8 @@ func _on_flamethrower(positions):
 					set_mode_frightened()
 				break
 		if mode != DEAD and mode != DYING and health <= 0:
+			if !$snarl2.is_playing():
+				$snarl2.play()
 			set_mode_dying()
 
 
@@ -339,11 +341,15 @@ func _on_removal_timer_timeout():
 
 
 func _on_frightened_timer_timeout():
+	if !$snarl.is_playing():
+		$snarl.play()
 	sudden_turn()
 	set_mode_chase()
 
 
 func _on_scatter_timer_timeout():
+	if !$snarl.is_playing():
+		$snarl.play()
 	set_mode_chase()
 
 

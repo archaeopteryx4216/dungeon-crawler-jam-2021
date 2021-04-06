@@ -1,16 +1,28 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://map_mesh/cube.obj" type="ArrayMesh" id=2]
 
-[sub_resource type="BoxShape" id=5]
+[sub_resource type="BoxShape" id=11]
+
+[sub_resource type="BoxShape" id=15]
 
 [node name="Spatial" type="Spatial"]
 
-[node name="generic cube" type="MeshInstance" parent="."]
+[node name="panel_wall" type="MeshInstance" parent="."]
+visible = false
 mesh = ExtResource( 2 )
 material/0 = null
 
-[node name="StaticBody" type="StaticBody" parent="generic cube"]
+[node name="StaticBody" type="StaticBody" parent="panel_wall"]
 
-[node name="CollisionShape" type="CollisionShape" parent="generic cube/StaticBody"]
-shape = SubResource( 5 )
+[node name="CollisionShape" type="CollisionShape" parent="panel_wall/StaticBody"]
+shape = SubResource( 11 )
+
+[node name="portholl_wall" type="MeshInstance" parent="."]
+mesh = ExtResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="portholl_wall"]
+
+[node name="CollisionShape" type="CollisionShape" parent="portholl_wall/StaticBody"]
+shape = SubResource( 15 )

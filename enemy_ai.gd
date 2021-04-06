@@ -126,7 +126,7 @@ func set_home_position(pos):
 # Force a sudden turn:
 func sudden_turn():
 	force_update_all_raycast()
-	var turn_options = gather_turn_options()
+	var turn_options = gather_turn_options(true)
 	if len(turn_options) > 0:
 		turn_options.shuffle()
 		turn(turn_options[0])
@@ -138,7 +138,7 @@ func force_update_all_raycast():
 	$"./right_ray".force_raycast_update()
 	$"./back_ray".force_raycast_update()
 
-func gather_turn_options():
+func gather_turn_options(can_reverse):
 	var turn_options = []
 	if !$"./front_ray".is_colliding():
 		turn_options.append("no_turn")
@@ -146,8 +146,9 @@ func gather_turn_options():
 		turn_options.append("left")
 	if !$"./right_ray".is_colliding():
 		turn_options.append("right")
-	if !$"./back_ray".is_colliding():
-		turn_options.append("reverse")
+	if can_reverse:
+		if !$"./back_ray".is_colliding():
+			turn_options.append("reverse")
 	return turn_options
 
 # AI movement for the chase mode
@@ -167,7 +168,7 @@ func chase():
 	# Note: Also checking reverse (Different from pacman AI!) to avoid
 	# being stuck going one way down a long coridor. Downside is that the alien
 	# can now get trapped if the player is in a separate parallel coridor.
-	var turn_options = gather_turn_options()
+	var turn_options = gather_turn_options(true)
 	if len(turn_options) == 0:
 		# Step 3) Reverse direction as we are in a dead end
 		turn("reverse")
@@ -199,7 +200,7 @@ func scatter():
 	# Note: Also checking reverse (Different from pacman AI!) to avoid
 	# being stuck going one way down a long coridor. Downside is that the alien
 	# can now get trapped if the player is in a separate parallel coridor.
-	var turn_options = gather_turn_options()
+	var turn_options = gather_turn_options(false)
 	if len(turn_options) == 0:
 		turn("reverse")
 	else:
@@ -226,7 +227,7 @@ func flee():
 	# Note: Also checking reverse (Different from pacman AI!) to avoid
 	# being stuck going one way down a long coridor. Downside is that the alien
 	# can now get trapped if the player is in a separate parallel coridor.
-	var turn_options = gather_turn_options()
+	var turn_options = gather_turn_options(true)
 	if len(turn_options) == 0:
 		turn("reverse")
 	else:

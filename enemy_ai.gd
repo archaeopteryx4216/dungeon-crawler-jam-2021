@@ -23,6 +23,7 @@ enum {
 # Exported global vars
 export var attack_strength = 5
 export var health = 200
+export var courage = 10000
 
 # Global Vars
 var player_position
@@ -322,7 +323,7 @@ func _on_flamethrower(positions):
 			if get_translation().distance_to(pos) < 1:
 				health -= 1
 				frightened_damage += 1
-				if frightened_damage > (randi()%1000 + 1):
+				if frightened_damage > (randi()%courage + 1):
 					set_mode_frightened()
 				break
 		if mode != DEAD and mode != DYING and health <= 0:

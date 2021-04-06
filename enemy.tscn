@@ -29,7 +29,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="SpriteFrames" id=6]
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [ ExtResource( 11 ), ExtResource( 12 ) ],
 "loop": true,
@@ -37,7 +37,7 @@ animations = [ {
 "speed": 2.0
 } ]
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="SpriteFrames" id=4]
 animations = [ {
 "frames": [ ExtResource( 10 ) ],
 "loop": true,
@@ -45,7 +45,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=5]
 animations = [ {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
@@ -110,7 +110,7 @@ visible = false
 layers = 2
 pixel_size = 0.015
 billboard = 2
-frames = SubResource( 6 )
+frames = SubResource( 3 )
 frame = 1
 playing = true
 
@@ -119,14 +119,14 @@ visible = false
 layers = 2
 pixel_size = 0.015
 billboard = 2
-frames = SubResource( 3 )
+frames = SubResource( 4 )
 
 [node name="dead" type="AnimatedSprite3D" parent="."]
 visible = false
 layers = 2
 pixel_size = 0.015
 billboard = 2
-frames = SubResource( 4 )
+frames = SubResource( 5 )
 
 [node name="death_timer" type="Timer" parent="."]
 one_shot = true

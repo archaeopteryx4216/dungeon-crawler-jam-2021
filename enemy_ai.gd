@@ -103,7 +103,7 @@ func set_mode_dead():
 
 # Initialize the enemy
 func _ready():
-	facing = SOUTH
+	facing = NORTH
 	set_mode_chase()
 	home_position = Vector3(0,0,0)
 	target_position = home_position

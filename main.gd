@@ -16,7 +16,7 @@ export var flamethrower_range = 5
 
 var game_over = false
 var player_facing = NORTH
-var flamethrower_on = true
+var flamethrower_on = false
 var flames_visible = false
 
 func _ready():
@@ -217,7 +217,7 @@ func _process(_delta):
 	pickup_gas_can()
 	if fuel > 0 and flamethrower_on:
 		fuel -= 0.1
-		emit_signal("flamethrower_on", [get_point_ahead_of_player(1), get_point_ahead_of_player(2), get_point_ahead_of_player(3)])
+		emit_signal("flamethrower_on", [get_point_ahead_of_player(1), get_point_ahead_of_player(2)])
 		if not flames_visible:
 			$main_view/firstperson_viewport/firstperson_pos/flame.turn_on()
 			flames_visible = true

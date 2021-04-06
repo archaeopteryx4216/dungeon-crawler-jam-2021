@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://3D_Sprites/alienwalk2.png" type="Texture" id=1]
 [ext_resource path="res://enemy_ai.gd" type="Script" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://3D_Sprites/alienattack1.png" type="Texture" id=8]
 [ext_resource path="res://3D_Sprites/alienattack3.png" type="Texture" id=9]
 [ext_resource path="res://3D_Sprites/aliendying.png" type="Texture" id=10]
+[ext_resource path="res://3D_Sprites/alienflee1.png" type="Texture" id=11]
+[ext_resource path="res://3D_Sprites/alienflee2.png" type="Texture" id=12]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -27,6 +29,14 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 12 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.0
+} ]
+
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [ ExtResource( 10 ) ],
@@ -42,8 +52,6 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 } ]
-
-[sub_resource type="CapsuleShape" id=5]
 
 [node name="enemy" type="Spatial" groups=[
 "enemies",
@@ -85,7 +93,6 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 1 )
-frame = 1
 playing = true
 
 [node name="attacking" type="AnimatedSprite3D" parent="."]
@@ -95,6 +102,14 @@ pixel_size = 0.015
 billboard = 2
 frames = SubResource( 2 )
 frame = 1
+playing = true
+
+[node name="fleeing" type="AnimatedSprite3D" parent="."]
+visible = false
+layers = 2
+pixel_size = 0.015
+billboard = 2
+frames = SubResource( 6 )
 playing = true
 
 [node name="dying" type="AnimatedSprite3D" parent="."]
@@ -111,20 +126,26 @@ pixel_size = 0.015
 billboard = 2
 frames = SubResource( 4 )
 
-[node name="Area" type="Area" parent="."]
-visible = false
-
-[node name="CollisionShape" type="CollisionShape" parent="Area"]
-transform = Transform( 0.75, 0, 0, 0, -8.14603e-08, -0.5, 0, 0.5, -8.14603e-08, 0, -0.2, 0 )
-visible = false
-shape = SubResource( 5 )
-
 [node name="death_timer" type="Timer" parent="."]
 one_shot = true
 
 [node name="removal_timer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
+
+[node name="frightened_timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="scatter_timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="chase_timer" type="Timer" parent="."]
+wait_time = 10.0
 [connection signal="timeout" from="action_timer" to="." method="_on_action_timer_timeout"]
 [connection signal="timeout" from="death_timer" to="." method="_on_death_timer_timeout"]
 [connection signal="timeout" from="removal_timer" to="." method="_on_removal_timer_timeout"]
+[connection signal="timeout" from="frightened_timer" to="." method="_on_frightened_timer_timeout"]
+[connection signal="timeout" from="scatter_timer" to="." method="_on_scatter_timer_timeout"]
+[connection signal="timeout" from="chase_timer" to="." method="_on_chase_timer_timeout"]

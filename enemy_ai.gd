@@ -30,11 +30,80 @@ var home_position
 var facing
 var target_position = Vector3(0,0,0)
 var mode
+var passable
+var frightened_damage = 0
+
+# Functions for switching the AI mode
+func set_mode_chase():
+	if mode != DYING and mode != DEAD:
+		mode = CHASE
+		passable = false
+		$walking.visible = true
+		$attacking.visible = false
+		$fleeing.visible = false
+		$dying.visible = false
+		$dead.visible = false
+		$chase_timer.start()
+
+func set_mode_scatter():
+	if mode != DYING and mode != DEAD:
+		mode = SCATTER
+		passable = true
+		$walking.visible = false
+		$attacking.visible = false
+		$fleeing.visible = false
+		$dying.visible = false
+		$dead.visible = false
+		$scatter_timer.start()
+
+func set_mode_frightened():
+	if mode != DYING and mode != DEAD:
+		sudden_turn()
+		mode = FRIGHTENED
+		passable = false
+		frightened_damage = 0
+		$walking.visible = false
+		$attacking.visible = false
+		$fleeing.visible = true
+		$dying.visible = false
+		$dead.visible = false
+		$frightened_timer.start()
+
+func set_mode_attacking():
+	if mode != DYING and mode != DEAD:
+		mode = ATTACK
+		passable = false
+		$walking.visible = false
+		$attacking.visible = true
+		$fleeing.visible = false
+		$dying.visible = false
+		$dead.visible = false
+		# No timer for this mode
+
+func set_mode_dying():
+	mode = DYING
+	passable = false
+	$walking.visible = false
+	$attacking.visible = false
+	$fleeing.visible = false
+	$dying.visible = true
+	$dead.visible = false
+	$death_timer.start()
+
+func set_mode_dead():
+	mode = DEAD
+	passable = true
+	$walking.visible = false
+	$attacking.visible = false
+	$fleeing.visible = false
+	$dying.visible = false
+	$dead.visible = true
+	$removal_timer.start()
 
 # Initialize the enemy
 func _ready():
 	facing = SOUTH
-	mode = CHASE
+	set_mode_chase()
 	home_position = Vector3(0,0,0)
 	target_position = home_position
 
@@ -53,6 +122,14 @@ func set_player_position(pos):
 # Set the home point for the enemy (for use in scatter mode)
 func set_home_position(pos):
 	home_position = pos
+
+# Force a sudden turn:
+func sudden_turn():
+	force_update_all_raycast()
+	var turn_options = gather_turn_options()
+	if len(turn_options) > 0:
+		turn_options.shuffle()
+		turn(turn_options[0])
 
 # Update all collision detection rays
 func force_update_all_raycast():
@@ -113,7 +190,24 @@ func attack():
 
 # AI Actions for the scatter mode
 func scatter():
-	pass
+	# Step 1) Take a step forward
+	var position = get_translation()
+	position = take_step(position, facing)
+	set_translation(position)
+	force_update_all_raycast()
+	# Step 2) Check forward, left, and right to see options for movement
+	# Note: Also checking reverse (Different from pacman AI!) to avoid
+	# being stuck going one way down a long coridor. Downside is that the alien
+	# can now get trapped if the player is in a separate parallel coridor.
+	var turn_options = gather_turn_options()
+	if len(turn_options) == 0:
+		turn("reverse")
+	else:
+		# Step 4) Choose a random direction
+		turn_options.shuffle()
+		var chosen_direction = turn_options[0]
+		# At this point chosen_direction is where we should turn
+		turn(chosen_direction)
 
 # AI Actions for the frightened mode
 func flee():
@@ -136,31 +230,31 @@ func flee():
 	if len(turn_options) == 0:
 		turn("reverse")
 	else:
-		# Step 4) Pick a random option since we are fleeing
-		turn_options.shuffle()
-		turn(turn_options[0])
+		# Step 4) Check each option to find the one farthest from the target
+		var largest_distance = 0
+		var chosen_direction = ""
+		for possible_turn in turn_options:
+			var new_cardinal_facing = turn_updated_facing(possible_turn)
+			var distance_to_target = target_position.distance_to(take_step(get_translation(), new_cardinal_facing))
+			if distance_to_target > largest_distance:
+				largest_distance = distance_to_target
+				chosen_direction = possible_turn
+		# At this point chosen_direction is where we should turn
+		turn(chosen_direction)
 
 # Take an AI action each time the timer expires
 func _on_action_timer_timeout():
 	if mode == CHASE:
-		$"./walking".visible = true
-		$"./attacking".visible = false
 		chase()
 		if target_position != null and get_translation().distance_to(target_position) < 2.5:
-			mode = ATTACK
+			set_mode_attacking()
 	elif mode == ATTACK:
-		$"./walking".visible = false
-		$"./attacking".visible = true
 		attack()
 		if target_position != null and get_translation().distance_to(target_position) >= 2.5:
-			mode = CHASE
+			set_mode_chase()
 	elif mode == SCATTER:
-		$"./walking".visible = true
-		$"./attacking".visible = false
 		scatter()
 	elif mode == FRIGHTENED:
-		$"./walking".visible = true
-		$"./attacking".visible = false
 		flee()
 
 # Given the current facing (stored in a global) and the turn direction,
@@ -218,28 +312,38 @@ func turn(direction):
 	elif direction == "reverse":
 		set_rotation(get_rotation() + Vector3(0,PI,0))
 
+func is_passable():
+	return passable
+
 func _on_flamethrower(positions):
-	for pos in positions:
-		if get_translation().distance_to(pos) < 1:
-			health -= 1
-			break
-	if mode != DEAD and mode != DYING and health <= 0:
-		mode = DYING
-		$"./walking".visible = false
-		$"./attacking".visible = false
-		$"./dying".visible = true
-		$death_timer.start()
-		
+	if mode != SCATTER and mode != DYING and mode != DEAD:
+		for pos in positions:
+			if get_translation().distance_to(pos) < 1:
+				health -= 1
+				frightened_damage += 1
+				if frightened_damage > (randi()%1000 + 1):
+					set_mode_frightened()
+				break
+		if mode != DEAD and mode != DYING and health <= 0:
+			set_mode_dying()
 
 
 func _on_death_timer_timeout():
-	mode = DEAD
-	$"./walking".visible = false
-	$"./attacking".visible = false
-	$"./dying".visible = false
-	$"./dead".visible = true
-	$removal_timer.start()
+	set_mode_dead()
 
 
 func _on_removal_timer_timeout():
 	queue_free()
+
+
+func _on_frightened_timer_timeout():
+	sudden_turn()
+	set_mode_chase()
+
+
+func _on_scatter_timer_timeout():
+	set_mode_chase()
+
+
+func _on_chase_timer_timeout():
+	set_mode_scatter()

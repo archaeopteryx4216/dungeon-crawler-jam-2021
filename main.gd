@@ -66,7 +66,7 @@ func _input(event):
 
 func overlapping_an_enemy(position):
 	for enemy in $enemies.get_children():
-		if position.distance_to(enemy.get_translation()) < 1:
+		if position.distance_to(enemy.get_translation()) < 1 and not enemy.is_passable():
 			return true
 	return false
 

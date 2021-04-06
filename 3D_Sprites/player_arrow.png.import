@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/player_arrow.png-9f759504eb94a6cd0ff952749751c97c.stex"
+path="res://.import/player_arrow.png-0040868df731ca135bbe2d7ab26c30be.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player_arrow.png"
-dest_files=[ "res://.import/player_arrow.png-9f759504eb94a6cd0ff952749751c97c.stex" ]
+source_file="res://3D_Sprites/player_arrow.png"
+dest_files=[ "res://.import/player_arrow.png-0040868df731ca135bbe2d7ab26c30be.stex" ]
 
 [params]
 
@@ -23,7 +23,7 @@ flags/repeat=0
 flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=1
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false

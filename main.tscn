@@ -1,16 +1,32 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://3D_Sprites/player_arrow.png" type="Texture" id=3]
 [ext_resource path="res://crosshairs.png" type="Texture" id=4]
 [ext_resource path="res://crosshairs.gd" type="Script" id=5]
+[ext_resource path="res://sfx/playerstep.wav" type="AudioStream" id=6]
 [ext_resource path="res://enemy.tscn" type="PackedScene" id=7]
 [ext_resource path="res://gas_can.tscn" type="PackedScene" id=8]
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
 [ext_resource path="res://flame.tscn" type="PackedScene" id=10]
+[ext_resource path="res://sfx/noise.wav" type="AudioStream" id=11]
+[ext_resource path="res://sfx/aliensnarl1.wav" type="AudioStream" id=12]
+[ext_resource path="res://sfx/aliensnarl2.wav" type="AudioStream" id=13]
 
-[sub_resource type="Environment" id=1]
+[sub_resource type="ProceduralSky" id=1]
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+
+[sub_resource type="Environment" id=3]
+background_mode = 1
+ambient_light_color = Color( 1, 1, 1, 1 )
+fog_enabled = true
+fog_color = Color( 0.00392157, 0, 0.0509804, 1 )
+fog_depth_begin = 2.0
+fog_depth_end = 10.0
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
@@ -70,6 +86,9 @@ collide_with_areas = true
 [node name="flame" parent="main_view/firstperson_viewport/firstperson_pos" instance=ExtResource( 10 )]
 transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, -0.5, 0 )
 
+[node name="flamesfx" type="AudioStreamPlayer" parent="main_view/firstperson_viewport/firstperson_pos"]
+stream = ExtResource( 11 )
+
 [node name="crosshairs" type="Sprite" parent="main_view"]
 visible = false
 texture = ExtResource( 4 )
@@ -95,6 +114,7 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8, 0
 
 [node name="overhead_camera" type="Camera" parent="side_view/overhead_viewport/overhead_pos"]
 cull_mask = 1048573
+environment = SubResource( 2 )
 near = 0.01
 far = 10.0
 
@@ -125,6 +145,9 @@ margin_right = 175.0
 margin_bottom = 20.0
 action_mode = 0
 text = "Move Up"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="turn_right" type="Button" parent="button_container"]
 margin_left = 180.0
@@ -165,6 +188,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="footsteps" type="AudioStreamPlayer" parent="button_container"]
+stream = ExtResource( 6 )
+
 [node name="walls" type="GridMap" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 1 )
 mesh_library = ExtResource( 2 )
@@ -186,11 +212,19 @@ __meta__ = {
 }
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 1 )
+environment = SubResource( 3 )
 
 [node name="enemies" type="Spatial" parent="."]
 
 [node name="enemy" parent="enemies" instance=ExtResource( 7 )]
+
+[node name="snarl" type="AudioStreamPlayer" parent="enemies/enemy"]
+stream = ExtResource( 12 )
+volume_db = -10.0
+
+[node name="snarl2" type="AudioStreamPlayer" parent="enemies/enemy"]
+stream = ExtResource( 13 )
+volume_db = -10.0
 
 [node name="game_over_message" type="Control" parent="."]
 visible = false

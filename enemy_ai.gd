@@ -22,7 +22,7 @@ enum {
 
 # Exported global vars
 export var attack_strength = 5
-export var health = 100
+export var health = 200
 
 # Global Vars
 var player_position
@@ -146,13 +146,13 @@ func _on_action_timer_timeout():
 		$"./walking".visible = true
 		$"./attacking".visible = false
 		chase()
-		if target_position != null and get_translation().distance_to(target_position) < 3:
+		if target_position != null and get_translation().distance_to(target_position) < 2.5:
 			mode = ATTACK
 	elif mode == ATTACK:
 		$"./walking".visible = false
 		$"./attacking".visible = true
 		attack()
-		if target_position != null and get_translation().distance_to(target_position) >= 3:
+		if target_position != null and get_translation().distance_to(target_position) >= 2.5:
 			mode = CHASE
 	elif mode == SCATTER:
 		$"./walking".visible = true
@@ -223,3 +223,23 @@ func _on_flamethrower(positions):
 		if get_translation().distance_to(pos) < 1:
 			health -= 1
 			break
+	if mode != DEAD and mode != DYING and health <= 0:
+		mode = DYING
+		$"./walking".visible = false
+		$"./attacking".visible = false
+		$"./dying".visible = true
+		$death_timer.start()
+		
+
+
+func _on_death_timer_timeout():
+	mode = DEAD
+	$"./walking".visible = false
+	$"./attacking".visible = false
+	$"./dying".visible = false
+	$"./dead".visible = true
+	$removal_timer.start()
+
+
+func _on_removal_timer_timeout():
+	queue_free()

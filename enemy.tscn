@@ -85,6 +85,7 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 1 )
+frame = 1
 playing = true
 
 [node name="attacking" type="AnimatedSprite3D" parent="."]
@@ -117,4 +118,13 @@ visible = false
 transform = Transform( 0.75, 0, 0, 0, -8.14603e-08, -0.5, 0, 0.5, -8.14603e-08, 0, -0.2, 0 )
 visible = false
 shape = SubResource( 5 )
+
+[node name="death_timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="removal_timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
 [connection signal="timeout" from="action_timer" to="." method="_on_action_timer_timeout"]
+[connection signal="timeout" from="death_timer" to="." method="_on_death_timer_timeout"]
+[connection signal="timeout" from="removal_timer" to="." method="_on_removal_timer_timeout"]

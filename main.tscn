@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -10,7 +10,19 @@
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
 [ext_resource path="res://flame.tscn" type="PackedScene" id=10]
 
-[sub_resource type="Environment" id=1]
+[sub_resource type="ProceduralSky" id=1]
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+
+[sub_resource type="Environment" id=3]
+background_mode = 1
+ambient_light_color = Color( 1, 1, 1, 1 )
+fog_enabled = true
+fog_color = Color( 0.00392157, 0, 0.0509804, 1 )
+fog_depth_begin = 2.0
+fog_depth_end = 10.0
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
@@ -95,6 +107,7 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8, 0
 
 [node name="overhead_camera" type="Camera" parent="side_view/overhead_viewport/overhead_pos"]
 cull_mask = 1048573
+environment = SubResource( 2 )
 near = 0.01
 far = 10.0
 
@@ -186,7 +199,7 @@ __meta__ = {
 }
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 1 )
+environment = SubResource( 3 )
 
 [node name="enemies" type="Spatial" parent="."]
 

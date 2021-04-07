@@ -243,6 +243,15 @@ func handle_computer_actions(delta):
 			amount_to_transfer = fuel
 		escape_pod_fuel += amount_to_transfer
 		fuel -= amount_to_transfer
+		if escape_pod_fuel >= needed_escape_pod_fuel/4 && escape_pod_fuel < needed_escape_pod_fuel/2:
+			var quarter_screen = load("res://map_mesh/computer_panel_25.material")
+			$computer/computer_screen.set_surface_material(0, quarter_screen) 
+		if escape_pod_fuel >= needed_escape_pod_fuel/2 && escape_pod_fuel < 3*needed_escape_pod_fuel/4:
+			var half_screen = load("res://map_mesh/computer_panel_50.material")
+			$computer/computer_screen.set_surface_material(0, half_screen) 
+		if escape_pod_fuel >= 3*needed_escape_pod_fuel/4 && escape_pod_fuel < needed_escape_pod_fuel:
+			var three_quarter_screen = load("res://map_mesh/computer_panel_75.material")
+			$computer/computer_screen.set_surface_material(0, three_quarter_screen) 
 		if escape_pod_fuel >= needed_escape_pod_fuel:
 			escape_pod_fuel = needed_escape_pod_fuel
 			ready_to_go = true

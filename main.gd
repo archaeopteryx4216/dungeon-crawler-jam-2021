@@ -20,16 +20,13 @@ var flamethrower_on = false
 var flames_visible = false
 
 const gas_can = preload("res://gas_can.tscn")
+const enemy = preload("res://enemy.tscn")
 
 func _ready():
 	# Set player stuff
 	$"side_view/player_sprite".position = Vector2(128,128)
 	$main_view/firstperson_viewport/firstperson_pos/flame.turn_off()
-	# Set stuff for the enemies
-	for enemy in $enemies.get_children():
-		enemy.connect("attacked", self, "_on_attacked")
-		self.connect("flamethrower_on", enemy, "_on_flamethrower")
-		enemy.set_home_position(Vector3(12,8,0))
+	
 		
 
 func pickup_gas_can():
@@ -242,6 +239,17 @@ func _process(_delta):
 
 func _on_get_fuel(ammount):
 	fuel += ammount
+
+func spawn_enemy(pos):
+	# Set stuff for the enemies
+	var new_enemy = enemy.instance()
+	new_enemy.connect("attacked", self, "_on_attacked")
+	self.connect("flamethrower_on", new_enemy, "_on_flamethrower")
+	#new_enemy.set_home_position(Vector3(12,8,0))
+	# Set position of the enemy
+	new_enemy.set_translation(pos)
+	# Add enemy to the scene
+	$enemies.add_child(new_enemy)
 
 func spawn_fuel_can(pos):
 	var new_gas_can = gas_can.instance()

@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://player_win.gd" type="Script" id=1]
+
+[node name="player_win" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.18921
+margin_bottom = -1.18921
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="you_win_message" type="Label" parent="."]
+margin_left = 416.407
+margin_top = 167.865
+margin_right = 573.407
+margin_bottom = 271.865
+text = "Congratulations!
+
+You win!!!
+
+Play Again?"
+align = 1
+valign = 1
+
+[node name="yes_button" type="Button" parent="."]
+margin_left = 431.682
+margin_top = 284.221
+margin_right = 465.682
+margin_bottom = 304.221
+text = "Yes"
+
+[node name="no_button" type="Button" parent="."]
+margin_left = 529.197
+margin_top = 284.221
+margin_right = 559.197
+margin_bottom = 304.221
+text = "No"
+[connection signal="pressed" from="yes_button" to="." method="_on_yes_button_pressed"]
+[connection signal="pressed" from="no_button" to="." method="_on_no_button_pressed"]

@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://game_start.gd" type="Script" id=1]
+
+[node name="game_start" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="intro_text" type="Label" parent="."]
+margin_left = 287.788
+margin_top = 115.353
+margin_right = 758.788
+margin_bottom = 231.353
+text = "You are trapped on a spaceship filled with nasty aliens!
+
+There is one escape pod left, but it needs to be fueled.
+
+The only problem is that your trusty flamethrower uses the same fuel!
+
+Quick! Refuel the escape pod at the computer station and get out of here!"
+align = 1
+valign = 1
+
+[node name="controls" type="Label" parent="."]
+margin_left = 432.872
+margin_top = 272.329
+margin_right = 616.872
+margin_bottom = 422.329
+text = "controls:
+
+w/up: move forward
+a/left: turn right
+s/down: move back
+d/left: turn right
+q/home: strafe left
+e/page up: strafe right
+space: fire flamethrower"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="begin_button" type="Button" parent="."]
+margin_left = 497.089
+margin_top = 457.845
+margin_right = 544.089
+margin_bottom = 477.845
+text = "BEGIN"
+[connection signal="pressed" from="begin_button" to="." method="_on_begin_button_pressed"]

@@ -1,28 +1,64 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=11 format=2]
 
+[ext_resource path="res://map_mesh/cubewallpanels.png" type="Texture" id=1]
 [ext_resource path="res://map_mesh/cube.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://map_mesh/escapepod.png" type="Texture" id=3]
+[ext_resource path="res://map_mesh/escape_pod.obj" type="ArrayMesh" id=4]
 
-[sub_resource type="BoxShape" id=11]
+[sub_resource type="SpatialMaterial" id=8]
+albedo_texture = ExtResource( 1 )
 
-[sub_resource type="BoxShape" id=15]
+[sub_resource type="ArrayMesh" id=2]
+surfaces/0 = {
+"aabb": AABB( -1, -1, -1, 2, 2.00001, 2 ),
+"array_data": PoolByteArray( 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 127, 0, 0, 129, 0, 0, 127, 0, 59, 0, 56, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 191, 0, 127, 0, 0, 129, 0, 0, 127, 0, 57, 0, 56, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 63, 0, 127, 0, 0, 129, 0, 0, 127, 0, 59, 0, 52, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 127, 0, 0, 129, 0, 0, 127, 0, 57, 0, 52, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 127, 0, 0, 127, 0, 127, 0, 57, 0, 52, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 127, 0, 0, 127, 0, 127, 0, 54, 0, 52, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 127, 0, 0, 127, 0, 127, 0, 57, 0, 0, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 127, 0, 0, 127, 0, 127, 0, 54, 0, 0, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 63, 129, 0, 0, 0, 0, 127, 0, 127, 0, 57, 0, 60, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 63, 129, 0, 0, 0, 0, 127, 0, 127, 0, 54, 0, 60, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 129, 0, 0, 0, 0, 127, 0, 127, 0, 57, 0, 58, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 191, 129, 0, 0, 0, 0, 127, 0, 127, 0, 54, 0, 58, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 191, 0, 129, 0, 0, 127, 0, 0, 127, 0, 54, 0, 56, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 191, 0, 129, 0, 0, 127, 0, 0, 127, 0, 48, 0, 56, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 0, 129, 0, 0, 127, 0, 0, 127, 0, 54, 0, 52, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 63, 0, 129, 0, 0, 127, 0, 0, 127, 0, 48, 0, 52, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 191, 127, 0, 0, 0, 0, 127, 0, 127, 0, 57, 0, 56, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 191, 127, 0, 0, 0, 0, 127, 0, 127, 0, 54, 0, 56, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 127, 0, 0, 0, 0, 127, 0, 127, 0, 57, 0, 52, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 63, 127, 0, 0, 0, 0, 127, 0, 127, 0, 54, 0, 52, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 129, 0, 0, 127, 0, 127, 0, 57, 0, 58, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 129, 0, 0, 127, 0, 127, 0, 54, 0, 58, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 129, 0, 0, 127, 0, 127, 0, 57, 0, 56, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 128, 191, 0, 0, 129, 0, 0, 127, 0, 127, 0, 54, 0, 56 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 2, 0, 1, 0, 3, 0, 4, 0, 5, 0, 6, 0, 6, 0, 5, 0, 7, 0, 8, 0, 9, 0, 10, 0, 10, 0, 9, 0, 11, 0, 12, 0, 13, 0, 14, 0, 14, 0, 13, 0, 15, 0, 16, 0, 17, 0, 18, 0, 18, 0, 17, 0, 19, 0, 20, 0, 21, 0, 22, 0, 22, 0, 21, 0, 23, 0 ),
+"blend_shape_data": [  ],
+"format": 97559,
+"index_count": 36,
+"material": SubResource( 8 ),
+"name": "panel_wall",
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 24
+}
+
+[sub_resource type="BoxShape" id=3]
+
+[sub_resource type="BoxShape" id=16]
+
+[sub_resource type="SpatialMaterial" id=17]
+albedo_texture = ExtResource( 3 )
+
+[sub_resource type="BoxShape" id=6]
 
 [node name="Spatial" type="Spatial"]
 
 [node name="panel_wall" type="MeshInstance" parent="."]
 visible = false
-mesh = ExtResource( 2 )
+mesh = SubResource( 2 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="panel_wall"]
 
 [node name="CollisionShape" type="CollisionShape" parent="panel_wall/StaticBody"]
-shape = SubResource( 11 )
+shape = SubResource( 3 )
 
 [node name="portholl_wall" type="MeshInstance" parent="."]
+visible = false
 mesh = ExtResource( 2 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="portholl_wall"]
 
 [node name="CollisionShape" type="CollisionShape" parent="portholl_wall/StaticBody"]
-shape = SubResource( 15 )
+shape = SubResource( 16 )
+
+[node name="escape_pod" type="MeshInstance" parent="."]
+mesh = ExtResource( 4 )
+material/0 = SubResource( 17 )
+
+[node name="StaticBody" type="StaticBody" parent="escape_pod"]
+
+[node name="CollisionShape" type="CollisionShape" parent="escape_pod/StaticBody"]
+shape = SubResource( 6 )

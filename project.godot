@@ -18,6 +18,7 @@ _global_script_class_icons={
 config/name="Dungeon Crawler Jam 2021"
 run/main_scene="res://game_start.tscn"
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [display]
 

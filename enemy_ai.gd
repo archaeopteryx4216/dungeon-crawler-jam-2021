@@ -21,7 +21,7 @@ enum {
 }
 
 # Exported global vars
-export var attack_strength = 5
+export var attack_strength = 4
 export var health = 200
 export var courage = 10000
 

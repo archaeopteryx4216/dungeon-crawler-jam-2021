@@ -16,7 +16,7 @@ export var fuel = 0
 export var flamethrower_range = 5
 export var max_fuel = 100
 export var fuel_drain_rate = 10
-export var needed_escape_pod_fuel = 150
+export var needed_escape_pod_fuel = 200
 export var armor_charge_rate = 7
 
 var game_over = false
@@ -30,6 +30,8 @@ const gas_can = preload("res://gas_can.tscn")
 const enemy = preload("res://enemy.tscn")
 
 func _ready():
+	# Initialize rng
+	randomize()
 	# Set player stuff
 	$"side_view/player_sprite".position = Vector2(128,128)
 	$main_view/firstperson_viewport/firstperson_pos/flame.turn_off()
@@ -262,9 +264,9 @@ func _process(delta):
 	if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to($computer.get_translation()) < 1:
 		# standing next to the computer
 		handle_computer_actions(delta)
-	$player_stat_display/armor_stat.text = "Armor: %d" % player_health
-	$player_stat_display/fuel_stat.text = "Fuel: %dml" % fuel
-	$player_stat_display/escape_pod_fuel_stat.text = "Escape Pod Fuel: %dml" % escape_pod_fuel
+	$player_stat_display/armor_stat.text = "Armor: %d%%" % player_health
+	$player_stat_display/fuel_stat.text = "Fuel: %dL" % fuel
+	$player_stat_display/escape_pod_fuel_stat.text = "Escape Pod Fuel: %dL" % escape_pod_fuel
 	pickup_gas_can()
 	if fuel > 0 and flamethrower_on:
 		if !$main_view/firstperson_viewport/firstperson_pos/flamesfx.is_playing():

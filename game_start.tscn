@@ -5,6 +5,8 @@
 [node name="game_start" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = -1.18921
+margin_bottom = -1.18921
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -26,10 +28,10 @@ align = 1
 valign = 1
 
 [node name="controls" type="Label" parent="."]
-margin_left = 432.872
-margin_top = 272.329
-margin_right = 616.872
-margin_bottom = 422.329
+margin_left = 430.622
+margin_top = 250.594
+margin_right = 614.622
+margin_bottom = 431.594
 text = "controls:
 
 w/up: move forward
@@ -38,10 +40,14 @@ s/down: move back
 d/left: turn right
 q/home: strafe left
 e/page up: strafe right
-space: fire flamethrower"
+space: fire flamethrower
+esc: quit"
 align = 1
 valign = 1
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="begin_button" type="Button" parent="."]
 margin_left = 497.089
@@ -49,4 +55,7 @@ margin_top = 457.845
 margin_right = 544.089
 margin_bottom = 477.845
 text = "BEGIN"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="begin_button" to="." method="_on_begin_button_pressed"]

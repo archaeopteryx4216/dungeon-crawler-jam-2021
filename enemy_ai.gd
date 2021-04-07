@@ -34,6 +34,25 @@ var mode
 var passable
 var frightened_damage = 0
 
+func overlapping_another_enemy(position):
+	for enemy in get_parent().get_children():
+		if position.distance_to(enemy.get_translation()) < 1 and not enemy.is_passable() and get_instance_id() != enemy.get_instance_id():
+			return true
+	return false
+
+func get_point_ahead(distance_multiplier):
+	if facing == NORTH:
+		return get_translation() +  Vector3(0,0,-2)*distance_multiplier
+	elif facing == SOUTH:
+		return get_translation() + Vector3(0,0,2)*distance_multiplier
+	elif facing == EAST:
+		return get_translation() + Vector3(2,0,0)*distance_multiplier
+	else: # facing == WEST
+		return get_translation() + Vector3(-2,0,0)*distance_multiplier
+
+func another_enemy_in_front():
+	return overlapping_another_enemy(get_point_ahead(1))
+
 # Functions for switching the AI mode
 func set_mode_chase():
 	if mode != DYING and mode != DEAD:
@@ -162,7 +181,8 @@ func chase():
 		sudden_turn()
 	# Step 1) Take a step forward
 	var position = get_translation()
-	position = take_step(position, facing)
+	if not another_enemy_in_front():
+		position = take_step(position, facing)
 	# Step 1.5) If we are right in front of the player, stop!
 	if position == target_position:
 		return
@@ -200,7 +220,8 @@ func scatter():
 		sudden_turn()
 	# Step 1) Take a step forward
 	var position = get_translation()
-	position = take_step(position, facing)
+	if not another_enemy_in_front():
+		position = take_step(position, facing)
 	set_translation(position)
 	force_update_all_raycast()
 	# Step 2) Check forward, left, and right to see options for movement
@@ -227,7 +248,8 @@ func flee():
 		sudden_turn()
 	# Step 1) Take a step forward
 	var position = get_translation()
-	position = take_step(position, facing)
+	if not another_enemy_in_front():
+		position = take_step(position, facing)
 	# Step 1.5) If we are right in front of the player, stop!
 	if position == target_position:
 		return

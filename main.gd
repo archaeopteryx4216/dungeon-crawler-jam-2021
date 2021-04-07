@@ -19,23 +19,20 @@ var player_facing = NORTH
 var flamethrower_on = false
 var flames_visible = false
 
+const gas_can = preload("res://gas_can.tscn")
+const enemy = preload("res://enemy.tscn")
+
 func _ready():
 	# Set player stuff
 	$"side_view/player_sprite".position = Vector2(128,128)
 	$main_view/firstperson_viewport/firstperson_pos/flame.turn_off()
-	# Set stuff for the enemies
-	for enemy in $enemies.get_children():
-		enemy.connect("attacked", self, "_on_attacked")
-		self.connect("flamethrower_on", enemy, "_on_flamethrower")
-		enemy.set_home_position(Vector3(12,8,0))
-	# Setup gascan signals
-	for gas_can in $"fuel_cans".get_children():
-		gas_can.connect("get_fuel", self, "_on_get_fuel")
+	
+		
 
 func pickup_gas_can():
-	for gas_can in $"fuel_cans".get_children():
-		if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(gas_can.get_translation()) < 1:
-			gas_can.pickup()
+	for existing_gas_can in $"fuel/fuel_cans".get_children():
+		if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(existing_gas_can.get_translation()) < 1:
+			existing_gas_can.pickup()
 
 func _input(event):
 	# Always check for the escape key to quit
@@ -65,13 +62,13 @@ func _input(event):
 		flamethrower_on = false
 
 func overlapping_an_enemy(position):
-	for enemy in $enemies.get_children():
+	for enemy in $enemy/enemies.get_children():
 		if position.distance_to(enemy.get_translation()) < 1 and not enemy.is_passable():
 			return true
 	return false
 
 func notify_all_enemies_of_player_position(position):
-	for enemy in $enemies.get_children():
+	for enemy in $enemy/enemies.get_children():
 		enemy.set_player_position(position)
 
 func update_cameras(pos_change, turn_rads):
@@ -242,3 +239,52 @@ func _process(_delta):
 
 func _on_get_fuel(ammount):
 	fuel += ammount
+
+func spawn_fuel_can(pos):
+	var new_gas_can = gas_can.instance()
+	new_gas_can.set_translation(pos)
+	new_gas_can.connect("get_fuel", self, "_on_get_fuel")
+	$fuel/fuel_cans.add_child(new_gas_can)
+
+func _on_fuel_spawn_timer_timeout():
+	# Get a list of all fuel spawn points
+	var fuel_spawn_points = $fuel/fuel_spawn_points.get_children()
+	# Pick a random element of the list
+	fuel_spawn_points.shuffle()
+	var selected_point = fuel_spawn_points[0]
+	# If the spawn point is not empty, add a new fuel can here
+	var occupied = false
+	for existing_gas_can in $"fuel/fuel_cans".get_children():
+		if selected_point.get_translation().distance_to(existing_gas_can.get_translation()) < 1:
+			occupied = true
+			break
+	if not occupied:
+		spawn_fuel_can(selected_point.get_translation())
+
+func spawn_enemy(pos):
+	# Set stuff for the enemies
+	var new_enemy = enemy.instance()
+	new_enemy.connect("attacked", self, "_on_attacked")
+	self.connect("flamethrower_on", new_enemy, "_on_flamethrower")
+	#new_enemy.set_home_position(Vector3(12,8,0))
+	# Set position of the enemy
+	new_enemy.set_translation(pos)
+	# Add enemy to the scene
+	$enemy/enemies.add_child(new_enemy)
+	if not $enemy/alien_spawn_sound.is_playing():
+		$enemy/alien_spawn_sound.play()
+
+func _on_enemy_spawn_timer_timeout():
+	# Get a list of all enemy spawn points
+	var enemy_spawn_points = $enemy/enemy_spawn_points.get_children()
+	# Pick a random element of the list
+	enemy_spawn_points.shuffle()
+	var selected_point = enemy_spawn_points[0]
+	# If the spawn point is not empty, enemy here
+	var occupied = false
+	for existing_enemy in $"enemy/enemies".get_children():
+		if selected_point.get_translation().distance_to(existing_enemy.get_translation()) < 1:
+			occupied = true
+			break
+	if not occupied:
+		spawn_enemy(selected_point.get_translation())

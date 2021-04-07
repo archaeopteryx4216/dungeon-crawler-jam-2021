@@ -11,13 +11,20 @@ signal flamethrower_on(positions)
 
 # Global vars
 export var player_health = 100
+export var max_player_health = 100
 export var fuel = 0
 export var flamethrower_range = 5
+export var max_fuel = 100
+export var fuel_drain_rate = 10
+export var needed_escape_pod_fuel = 150
+export var armor_charge_rate = 7
 
 var game_over = false
 var player_facing = NORTH
 var flamethrower_on = false
 var flames_visible = false
+var escape_pod_fuel = 0
+var ready_to_go = false
 
 const gas_can = preload("res://gas_can.tscn")
 const enemy = preload("res://enemy.tscn")
@@ -26,13 +33,16 @@ func _ready():
 	# Set player stuff
 	$"side_view/player_sprite".position = Vector2(128,128)
 	$main_view/firstperson_viewport/firstperson_pos/flame.turn_off()
-	
-		
 
 func pickup_gas_can():
 	for existing_gas_can in $"fuel/fuel_cans".get_children():
 		if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(existing_gas_can.get_translation()) < 1:
-			existing_gas_can.pickup()
+			if fuel < max_fuel:
+				existing_gas_can.pickup()
+
+func special_escape_pod_mode_up_case():
+	if player_facing == NORTH and ready_to_go and $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to(Vector3(0,0,0)) < 1:
+		get_tree().change_scene("res://player_win.tscn")
 
 func _input(event):
 	# Always check for the escape key to quit
@@ -42,6 +52,7 @@ func _input(event):
 	if game_over:
 		return
 	if event.is_action_pressed("move_up"):
+		special_escape_pod_mode_up_case()
 		update_cameras(move("move_up"), Vector3(0,0,0))
 	elif event.is_action_pressed("move_down"):
 		update_cameras(move("move_down"), Vector3(0,0,0))
@@ -62,6 +73,9 @@ func _input(event):
 		flamethrower_on = false
 
 func overlapping_an_enemy(position):
+	# if we have no fuel, we can walk past enemies
+	if fuel <= 0:
+		return false
 	for enemy in $enemy/enemies.get_children():
 		if position.distance_to(enemy.get_translation()) < 1 and not enemy.is_passable():
 			return true
@@ -202,7 +216,7 @@ func _on_attacked(enemy_position, attack_strength):
 			flamethrower_on = false
 
 func _on_retry_button_pressed():
-	get_tree().change_scene("res://main.tscn")
+	get_tree().change_scene("res://game_start.tscn")
 
 # Distance multiplier should be a positive integer
 # This function returns the point <distance_multiplier> grid squares ahead of the player
@@ -216,9 +230,32 @@ func get_point_ahead_of_player(distance_multiplier):
 	else: # player_facing == WEST
 		return $main_view/firstperson_viewport/firstperson_pos.get_translation() + Vector3(-2,0,0)*distance_multiplier
 
-func _process(_delta):
-	$player_stat_display/armor_stat.text = "Armor: {str}%".format({"str":player_health})
-	$player_stat_display/fuel_stat.text = "Fuel: {str}ml".format({"str":fuel})
+func handle_computer_actions(delta):
+	if player_facing == NORTH and escape_pod_fuel < needed_escape_pod_fuel:
+		# Recharge armor
+		var amount_to_charge = armor_charge_rate * delta
+		if amount_to_charge + player_health > max_player_health:
+			amount_to_charge = max_player_health - player_health
+		player_health += amount_to_charge
+		# Offload fuel
+		var amount_to_transfer = fuel_drain_rate * delta
+		if amount_to_transfer > fuel:
+			amount_to_transfer = fuel
+		escape_pod_fuel += amount_to_transfer
+		fuel -= amount_to_transfer
+		if escape_pod_fuel >= needed_escape_pod_fuel:
+			escape_pod_fuel = needed_escape_pod_fuel
+			ready_to_go = true
+			var ready_screen = load("res://map_mesh/computer_panel_ready.material")
+			$computer/computer_screen.set_surface_material(0, ready_screen)
+
+func _process(delta):
+	if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to($computer.get_translation()) < 1:
+		# standing next to the computer
+		handle_computer_actions(delta)
+	$player_stat_display/armor_stat.text = "Armor: %d" % player_health
+	$player_stat_display/fuel_stat.text = "Fuel: %dml" % fuel
+	$player_stat_display/escape_pod_fuel_stat.text = "Escape Pod Fuel: %dml" % escape_pod_fuel
 	pickup_gas_can()
 	if fuel > 0 and flamethrower_on:
 		if !$main_view/firstperson_viewport/firstperson_pos/flamesfx.is_playing():
@@ -239,6 +276,8 @@ func _process(_delta):
 
 func _on_get_fuel(ammount):
 	fuel += ammount
+	if fuel >= max_fuel:
+		fuel = max_fuel
 
 func spawn_fuel_can(pos):
 	var new_gas_can = gas_can.instance()
@@ -275,16 +314,19 @@ func spawn_enemy(pos):
 		$enemy/alien_spawn_sound.play()
 
 func _on_enemy_spawn_timer_timeout():
-	# Get a list of all enemy spawn points
-	var enemy_spawn_points = $enemy/enemy_spawn_points.get_children()
-	# Pick a random element of the list
-	enemy_spawn_points.shuffle()
-	var selected_point = enemy_spawn_points[0]
-	# If the spawn point is not empty, enemy here
-	var occupied = false
-	for existing_enemy in $"enemy/enemies".get_children():
-		if selected_point.get_translation().distance_to(existing_enemy.get_translation()) < 1:
-			occupied = true
-			break
-	if not occupied:
-		spawn_enemy(selected_point.get_translation())
+	if $enemy/enemies.get_child_count() < $enemy.max_enemies:
+		# Get a list of all enemy spawn points
+		var enemy_spawn_points = $enemy/enemy_spawn_points.get_children()
+		# Pick a random element of the list
+		enemy_spawn_points.shuffle()
+		var selected_point = enemy_spawn_points[0]
+		# If the spawn point is not empty, enemy here
+		var occupied = false
+		for existing_enemy in $"enemy/enemies".get_children():
+			if selected_point.get_translation().distance_to(existing_enemy.get_translation()) < 1:
+				occupied = true
+				break
+		if not occupied:
+			spawn_enemy(selected_point.get_translation())
+
+

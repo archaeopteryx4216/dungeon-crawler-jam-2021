@@ -14,12 +14,16 @@ export var player_health = 100
 export var fuel = 0
 export var flamethrower_range = 5
 
+var max_alien_gen = RandomNumberGenerator.new()
+var max_aliens = 2
+
 var game_over = false
 var player_facing = NORTH
 var flamethrower_on = false
 var flames_visible = false
 
 const gas_can = preload("res://gas_can.tscn")
+const alien = preload("res://enemy.tscn")
 
 func _ready():
 	# Set player stuff
@@ -263,3 +267,33 @@ func _on_fuel_spawn_timer_timeout():
 			break
 	if not occupied:
 		spawn_fuel_can(selected_point.get_translation())
+
+func _on_enemy_spawn_timer_timeout():
+	#Get spawn points
+	var enemy_spawn_points = $fuel/fuel_spawn_points.get_children()
+	#Pick a random point
+	enemy_spawn_points.shuffle()
+	var selected_spawn = enemy_spawn_points[0]
+	#If far enough away from player, spawn
+	var enemies = count_enemies()
+	if enemies < max_aliens:
+		var distance_to_player = selected_spawn.get_translation().distance_to($main_view/firstperson_viewport/firstperson_pos.get_translation())
+		if distance_to_player > 5:
+			$enemyspawn.play()
+			var new_enemy = alien.instance()
+			new_enemy.set_translation(selected_spawn.get_translation())
+			new_enemy.connect("attacked", self, "_on_attacked")
+			self.connect("flamethrower_on", new_enemy, "_on_flamethrower")
+			new_enemy.set_home_position(Vector3(12,8,0))
+			$enemies.add_child(new_enemy)
+	$enemy_spawn_timer.start()
+		
+func count_enemies():
+	#initialize count
+	var count = 0
+	#count
+	for node in $enemies.get_children():
+		if node.get_class() == "enemy":
+			count += 1
+			
+	return count

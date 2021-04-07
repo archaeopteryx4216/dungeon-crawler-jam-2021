@@ -96,6 +96,7 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 1 )
+frame = 1
 playing = true
 
 [node name="attacking" type="AnimatedSprite3D" parent="."]
@@ -113,6 +114,7 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 3 )
+frame = 1
 playing = true
 
 [node name="dying" type="AnimatedSprite3D" parent="."]

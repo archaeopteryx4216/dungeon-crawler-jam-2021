@@ -157,6 +157,9 @@ func chase():
 	# Step 0) Verify that the target is not null
 	if target_position == null:
 		return
+	# Step 0.5) If we are facing a wall somehow, turn away from it!
+	if $"./front_ray".is_colliding():
+		sudden_turn()
 	# Step 1) Take a step forward
 	var position = get_translation()
 	position = take_step(position, facing)
@@ -192,6 +195,9 @@ func attack():
 
 # AI Actions for the scatter mode
 func scatter():
+	# Step 0.5) If we are facing a wall somehow, turn away from it!
+	if $"./front_ray".is_colliding():
+		sudden_turn()
 	# Step 1) Take a step forward
 	var position = get_translation()
 	position = take_step(position, facing)
@@ -216,6 +222,9 @@ func flee():
 	# Step 0) Verify that the target is not null
 	if target_position == null:
 		return
+	# Step 0.5) If we are facing a wall somehow, turn away from it!
+	if $"./front_ray".is_colliding():
+		sudden_turn()
 	# Step 1) Take a step forward
 	var position = get_translation()
 	position = take_step(position, facing)

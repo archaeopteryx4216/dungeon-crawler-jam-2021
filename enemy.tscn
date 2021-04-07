@@ -64,6 +64,7 @@ stereo = true
 [node name="enemy" type="Spatial" groups=[
 "enemies",
 ]]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, 0 )
 script = ExtResource( 2 )
 
 [node name="action_timer" type="Timer" parent="."]
@@ -72,7 +73,7 @@ autostart = true
 
 [node name="front_ray" type="RayCast" parent="."]
 enabled = true
-cast_to = Vector3( 0, 1, 2 )
+cast_to = Vector3( 0, -1, 2 )
 collide_with_areas = true
 
 [node name="back_ray" type="RayCast" parent="."]
@@ -109,6 +110,7 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 2 )
+frame = 3
 playing = true
 
 [node name="fleeing" type="AnimatedSprite3D" parent="."]

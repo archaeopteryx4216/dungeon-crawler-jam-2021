@@ -17,6 +17,7 @@ export var flamethrower_range = 5
 export var max_fuel = 100
 export var fuel_drain_rate = 10
 export var needed_escape_pod_fuel = 150
+export var armor_charge_rate = 7
 
 var game_over = false
 var player_facing = NORTH
@@ -72,6 +73,9 @@ func _input(event):
 		flamethrower_on = false
 
 func overlapping_an_enemy(position):
+	# if we have no fuel, we can walk past enemies
+	if fuel <= 0:
+		return false
 	for enemy in $enemy/enemies.get_children():
 		if position.distance_to(enemy.get_translation()) < 1 and not enemy.is_passable():
 			return true
@@ -228,12 +232,17 @@ func get_point_ahead_of_player(distance_multiplier):
 
 func handle_computer_actions(delta):
 	if player_facing == NORTH and escape_pod_fuel < needed_escape_pod_fuel:
+		# Recharge armor
+		var amount_to_charge = armor_charge_rate * delta
+		if amount_to_charge + player_health > max_player_health:
+			amount_to_charge = max_player_health - player_health
+		player_health += amount_to_charge
 		# Offload fuel
-		var ammount_to_transfer = fuel_drain_rate * delta
-		if ammount_to_transfer > fuel:
-			ammount_to_transfer = fuel
-		escape_pod_fuel += ammount_to_transfer
-		fuel -= ammount_to_transfer
+		var amount_to_transfer = fuel_drain_rate * delta
+		if amount_to_transfer > fuel:
+			amount_to_transfer = fuel
+		escape_pod_fuel += amount_to_transfer
+		fuel -= amount_to_transfer
 		if escape_pod_fuel >= needed_escape_pod_fuel:
 			escape_pod_fuel = needed_escape_pod_fuel
 			ready_to_go = true

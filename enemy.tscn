@@ -12,6 +12,8 @@
 [ext_resource path="res://3D_Sprites/aliendying.png" type="Texture" id=10]
 [ext_resource path="res://3D_Sprites/alienflee1.png" type="Texture" id=11]
 [ext_resource path="res://3D_Sprites/alienflee2.png" type="Texture" id=12]
+[ext_resource path="res://sfx/aliensnarl1.wav" type="AudioStream" id=13]
+[ext_resource path="res://sfx/aliensnarl2.wav" type="AudioStream" id=14]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -52,14 +54,6 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 } ]
-
-[sub_resource type="AudioStreamSample" id=6]
-format = 1
-stereo = true
-
-[sub_resource type="AudioStreamSample" id=7]
-format = 1
-stereo = true
 
 [node name="enemy" type="Spatial" groups=[
 "enemies",
@@ -102,6 +96,7 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 1 )
+frame = 1
 playing = true
 
 [node name="attacking" type="AnimatedSprite3D" parent="."]
@@ -119,6 +114,7 @@ layers = 2
 pixel_size = 0.015
 billboard = 2
 frames = SubResource( 3 )
+frame = 1
 playing = true
 
 [node name="dying" type="AnimatedSprite3D" parent="."]
@@ -154,10 +150,10 @@ one_shot = true
 wait_time = 10.0
 
 [node name="snarl" type="AudioStreamPlayer" parent="."]
-stream = SubResource( 6 )
+stream = ExtResource( 13 )
 
 [node name="snarl2" type="AudioStreamPlayer" parent="."]
-stream = SubResource( 7 )
+stream = ExtResource( 14 )
 [connection signal="timeout" from="action_timer" to="." method="_on_action_timer_timeout"]
 [connection signal="timeout" from="death_timer" to="." method="_on_death_timer_timeout"]
 [connection signal="timeout" from="removal_timer" to="." method="_on_removal_timer_timeout"]

@@ -271,6 +271,8 @@ func spawn_enemy(pos):
 	new_enemy.set_translation(pos)
 	# Add enemy to the scene
 	$enemy/enemies.add_child(new_enemy)
+	if not $enemy/alien_spawn_sound.is_playing():
+		$enemy/alien_spawn_sound.play()
 
 func _on_enemy_spawn_timer_timeout():
 	# Get a list of all enemy spawn points

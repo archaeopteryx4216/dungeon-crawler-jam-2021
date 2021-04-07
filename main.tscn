@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://main.gd" type="Script" id=1]
 [ext_resource path="res://wall_mesh_library.tres" type="MeshLibrary" id=2]
@@ -11,7 +11,7 @@
 [ext_resource path="res://floor_mesh_library.tres" type="MeshLibrary" id=9]
 [ext_resource path="res://flame.tscn" type="PackedScene" id=10]
 [ext_resource path="res://sfx/noise.wav" type="AudioStream" id=11]
-[ext_resource path="res://map_mesh/computerpanels/computerfuelempty.png" type="Texture" id=12]
+[ext_resource path="res://map_mesh/computer_panel_empty.material" type="Material" id=12]
 [ext_resource path="res://map_mesh/computer_screen.obj" type="ArrayMesh" id=13]
 
 [sub_resource type="ProceduralSky" id=1]
@@ -27,9 +27,6 @@ fog_enabled = true
 fog_color = Color( 0.00392157, 0, 0.0509804, 1 )
 fog_depth_begin = 2.0
 fog_depth_end = 10.0
-
-[sub_resource type="SpatialMaterial" id=4]
-albedo_texture = ExtResource( 12 )
 
 [node name="Control" type="Control"]
 anchor_right = 0.838
@@ -334,7 +331,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0 )
 [node name="computer_screen" type="MeshInstance" parent="computer"]
 transform = Transform( 1.62921e-07, -5.30863e-14, -1, -3.25841e-07, -1, 0, -1, 3.25841e-07, -1.62921e-07, 0, 0, -1 )
 mesh = ExtResource( 13 )
-material/0 = SubResource( 4 )
+material/0 = ExtResource( 12 )
 [connection signal="pressed" from="button_container/turn_left" to="." method="_on_turn_left_pressed"]
 [connection signal="pressed" from="button_container/move_up" to="." method="_on_move_up_pressed"]
 [connection signal="pressed" from="button_container/turn_right" to="." method="_on_turn_right_pressed"]

@@ -237,6 +237,8 @@ func handle_computer_actions(delta):
 		if escape_pod_fuel >= needed_escape_pod_fuel:
 			escape_pod_fuel = needed_escape_pod_fuel
 			ready_to_go = true
+			var ready_screen = load("res://map_mesh/computer_panel_ready.material")
+			$computer/computer_screen.set_surface_material(0, ready_screen)
 
 func _process(delta):
 	if $main_view/firstperson_viewport/firstperson_pos.get_translation().distance_to($computer.get_translation()) < 1:
